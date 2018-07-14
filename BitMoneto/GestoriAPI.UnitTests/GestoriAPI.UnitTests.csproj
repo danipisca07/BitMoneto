@@ -52,6 +52,7 @@
     <Compile Include="BitcoinBlockexplorerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BinanceExchangeTests.cs" />
+    <Compile Include="CryptoCompareConvertitoreTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

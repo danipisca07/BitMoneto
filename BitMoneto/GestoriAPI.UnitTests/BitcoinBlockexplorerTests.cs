@@ -25,8 +25,8 @@ namespace GestoriAPI.UnitTests
         [TestMethod]
         public void ScaricaPortafoglio_IndirizzoStabile_Valore()
         {
-            String indirizzoStabile = "1EBHA1ckUWzNKN7BMfDwGTx6GKEbADUozX";
-            Portafoglio atteso = new Portafoglio(indirizzoStabile, new Valuta("Bitcoin", "BTC", (decimal)66233.7586831));
+            String indirizzoStabile = "1JaPNwMXt2AuVkWmkUHbsw78MbGorTfmm2";
+            Portafoglio atteso = new Portafoglio(indirizzoStabile, new Valuta("Bitcoin", "BTC", (decimal)2194.51101));
             BitcoinBlockexplorer blockexplorer = new BitcoinBlockexplorer(indirizzoStabile);
             Portafoglio ris = blockexplorer.ScaricaPortafoglio().Result;
             Assert.AreEqual<Portafoglio>(ris, atteso);

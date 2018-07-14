@@ -14,11 +14,19 @@ namespace Criptovalute
 
         public decimal Quantità { get; }
 
+        public Dictionary<String, decimal> Cambi { get; }
+
         public Valuta(string nome, string simbolo, decimal quantità)
         {
             Nome = nome ?? throw new ArgumentNullException(nameof(nome));
             Simbolo = simbolo ?? throw new ArgumentNullException(nameof(simbolo));
             Quantità = quantità;
+        }
+
+        public Valuta(string nome, string simbolo, decimal quantità, Dictionary<String, decimal> cambi) 
+            : this(nome,simbolo,quantità)
+        {
+            Cambi = cambi;
         }
 
         public override bool Equals(object obj)

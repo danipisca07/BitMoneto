@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="BinanceExchange.cs" />
     <Compile Include="BitcoinBlockexplorer.cs" />
+    <Compile Include="CryptoCompareConvertitore.cs" />
     <Compile Include="EccezioneApi.cs" />
     <Compile Include="EthereumEtherscan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
