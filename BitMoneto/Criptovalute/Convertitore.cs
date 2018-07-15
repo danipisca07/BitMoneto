@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Criptovalute
 {
-    public interface Convertitore
+    public interface IConvertitore
     {
         Task<Dictionary<String, decimal>> ScaricaCambi(String simboloValuta);
         Task<Dictionary<String, decimal>> ScaricaCambi(String simboloValuta, String[] simboliConversioni);

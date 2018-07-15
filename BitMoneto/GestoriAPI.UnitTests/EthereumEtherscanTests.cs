@@ -8,7 +8,7 @@ namespace GestoriAPI.UnitTests
     [TestClass]
     public class EthereumEtherscanTests
     {
-        Convertitore convertitore;
+        IConvertitore convertitore;
         ValutaFactory factory;
         public EthereumEtherscanTests()
         {

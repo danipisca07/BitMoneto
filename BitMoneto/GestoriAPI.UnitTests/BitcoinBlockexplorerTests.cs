@@ -8,7 +8,7 @@ namespace GestoriAPI.UnitTests
     [TestClass]
     public class BitcoinBlockExplorerTests
     {
-        Convertitore convertitore;
+        IConvertitore convertitore;
         ValutaFactory factory;
         public BitcoinBlockExplorerTests()
         {

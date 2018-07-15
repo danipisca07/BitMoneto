@@ -29,7 +29,7 @@ namespace GestoriAPI
             List<Fondo> fondi = new List<Fondo>();
             try
             {
-                var binanceClient = new BinanceClient(_apiClient);
+                BinanceClient binanceClient = new BinanceClient(_apiClient);
                 AccountInfo ris = await binanceClient.GetAccountInfo();
                 Binance.API.Csharp.Client.Models.Market.Balance[] risArray = ris.Balances.ToArray();
 

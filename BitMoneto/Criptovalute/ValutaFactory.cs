@@ -8,10 +8,10 @@ namespace Criptovalute
 {
     public class ValutaFactory
     {
-        private Convertitore _convertitore;
+        private IConvertitore _convertitore;
         private Dictionary<String, Valuta> _valute;
 
-        public ValutaFactory(Convertitore convertitore)
+        public ValutaFactory(IConvertitore convertitore)
         {
             _convertitore = convertitore;
             _valute = new Dictionary<string, Valuta>();
@@ -20,6 +20,7 @@ namespace Criptovalute
 
         public Valuta OttieniValuta(String simbolo)
         {
+            simbolo = simbolo.ToUpper();
             if (_valute.TryGetValue(simbolo, out Valuta valuta))
             {
                 return valuta;

@@ -10,7 +10,7 @@ using System.Web.Helpers;
 
 namespace GestoriAPI
 {
-    public class CryptoCompareConvertitore : Convertitore
+    public class CryptoCompareConvertitore : IConvertitore
     {
         private static readonly String INDIRIZZO = "https://min-api.cryptocompare.com/data/";
         private String[] _simboliConversioniDefault;
