@@ -6,28 +6,28 @@ namespace Criptovalute
 {
     public class Portafoglio
     {
-        public Portafoglio(string indirizzo, Valuta valuta)
+        public Portafoglio(string indirizzo, Fondo fondo)
         {
             Indirizzo = indirizzo ?? throw new ArgumentNullException(nameof(indirizzo));
-            Valuta = valuta ?? throw new ArgumentNullException(nameof(valuta));
+            Fondo = fondo ?? throw new ArgumentNullException(nameof(fondo));
         }
 
         public String Indirizzo { get; }
-        public Valuta Valuta { get; }
+        public Fondo Fondo { get; }
 
         public override bool Equals(object obj)
         {
             var portafoglio = obj as Portafoglio;
             return portafoglio != null &&
                    Indirizzo == portafoglio.Indirizzo &&
-                   EqualityComparer<Valuta>.Default.Equals(Valuta, portafoglio.Valuta);
+                   Fondo.Equals(portafoglio.Fondo);
         }
 
         public override int GetHashCode()
         {
             var hashCode = -883361895;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Indirizzo);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Valuta>.Default.GetHashCode(Valuta);
+            hashCode = hashCode * -1521134295 + Indirizzo.GetHashCode();
+            hashCode = hashCode * -1521134295 + Fondo.GetHashCode();
             return hashCode;
         }
     }

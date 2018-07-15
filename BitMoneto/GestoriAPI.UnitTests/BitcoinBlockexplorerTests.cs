@@ -6,28 +6,45 @@ using Criptovalute;
 namespace GestoriAPI.UnitTests
 {
     [TestClass]
-    public class BitcoinExplorerTests
+    public class BitcoinBlockExplorerTests
     {
+        Convertitore convertitore;
+        ValutaFactory factory;
+        public BitcoinBlockExplorerTests()
+        {
+            convertitore = new CryptoCompareConvertitore();
+            factory = new ValutaFactory(convertitore);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void Costruttore_SenzaIndirizzo_Eccezione()
         {
-            BitcoinBlockexplorer explorer = new BitcoinBlockexplorer(null);
+            BitcoinBlockexplorer explorer = new BitcoinBlockexplorer(null,factory);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void Costruttore_IndirizzoVuoto_Eccezione()
         {
-            BitcoinBlockexplorer explorer = new BitcoinBlockexplorer("");
+            BitcoinBlockexplorer explorer = new BitcoinBlockexplorer("", factory);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Costruttore_FactoryNull_Eccezione()
+        {
+            BitcoinBlockexplorer explorer = new BitcoinBlockexplorer("asdff2f23f3qr32r2rq23r2vrq23vr", null);
         }
 
         [TestMethod]
         public void ScaricaPortafoglio_IndirizzoStabile_Valore()
         {
             String indirizzoStabile = "1JaPNwMXt2AuVkWmkUHbsw78MbGorTfmm2";
-            Portafoglio atteso = new Portafoglio(indirizzoStabile, new Valuta("Bitcoin", "BTC", (decimal)2194.51101));
-            BitcoinBlockexplorer blockexplorer = new BitcoinBlockexplorer(indirizzoStabile);
+            Valuta bitcoin = factory.OttieniValuta("BTC");
+            Fondo fondo = new Fondo(bitcoin, (decimal)2194.51101);
+            Portafoglio atteso = new Portafoglio(indirizzoStabile, fondo);
+            BitcoinBlockexplorer blockexplorer = new BitcoinBlockexplorer(indirizzoStabile, factory);
             Portafoglio ris = blockexplorer.ScaricaPortafoglio().Result;
             Assert.AreEqual<Portafoglio>(ris, atteso);
         }
@@ -36,7 +53,7 @@ namespace GestoriAPI.UnitTests
         [ExpectedException(typeof(AggregateException))]
         public void ScaricaPortafoglio_IndirizzoErrato_Eccezione()
         {
-            BitcoinBlockexplorer blockexplorer = new BitcoinBlockexplorer("blabla");
+            BitcoinBlockexplorer blockexplorer = new BitcoinBlockexplorer("blabla",factory);
             Portafoglio ris = blockexplorer.ScaricaPortafoglio().Result;
         }
     }

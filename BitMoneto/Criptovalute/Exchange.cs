@@ -7,6 +7,6 @@ namespace Criptovalute
 {
     public interface Exchange
     {
-        Task<List<Valuta>> ScaricaFondi();
+        Task<List<Fondo>> ScaricaFondi();
     }
 }

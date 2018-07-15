@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GestoriAPI
+namespace Criptovalute
 {
     public class EccezioneApi : Exception
     {

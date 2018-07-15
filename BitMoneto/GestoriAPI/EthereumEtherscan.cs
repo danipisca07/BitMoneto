@@ -12,12 +12,16 @@ namespace GestoriAPI
 {
     public class EthereumEtherscan : Criptovalute.Blockchain
     {
+        private ValutaFactory _factory;
         public String Indirizzo { get; }
-        public EthereumEtherscan(String indirizzo)
+        public EthereumEtherscan(String indirizzo, ValutaFactory factory)
         {
             if (indirizzo == null || indirizzo == "")
                 throw new ArgumentException("Indirizzo non valido");
+            if(factory == null)
+                throw new ArgumentException("factory non può essere null!");
             Indirizzo = indirizzo;
+            _factory = factory;
         }
 
         public async Task<Portafoglio> ScaricaPortafoglio()
@@ -37,7 +41,9 @@ namespace GestoriAPI
                     throw new EccezioneApi("Valore non valido");
                 }
                 quantità /= (decimal)Math.Pow(10,18); //Il valore restituito è multiplo, lo riporto a valore unitario
-                Portafoglio portafoglio = new Portafoglio(Indirizzo, new Valuta("Ethereum", "ETH", quantità));
+                Valuta valuta = _factory.OttieniValuta("ETH");
+                Fondo fondo = new Fondo(valuta, quantità);
+                Portafoglio portafoglio = new Portafoglio(Indirizzo, fondo);
                 return portafoglio;
             }
             else

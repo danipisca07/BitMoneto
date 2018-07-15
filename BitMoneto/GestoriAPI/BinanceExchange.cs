@@ -14,20 +14,22 @@ namespace GestoriAPI
 {
     public class BinanceExchange : Criptovalute.Exchange
     {
-        private ApiClient apiClient;
-        public BinanceExchange(String publicKey, String privateKey)
+        private readonly ApiClient _apiClient;
+        private readonly ValutaFactory _factory;
+        public BinanceExchange(String publicKey, String privateKey, ValutaFactory factory)
         {
             if (publicKey == null || publicKey == "" || privateKey == null || privateKey == "")
                 throw new ArgumentException("chiavi non valide!");
-            apiClient = new ApiClient(publicKey, privateKey);
+            _apiClient = new ApiClient(publicKey, privateKey);
+            _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }
 
-        public async Task<List<Valuta>> ScaricaFondi()
+        public async Task<List<Fondo>> ScaricaFondi()
         {
-            List<Valuta> fondi = new List<Valuta>();
+            List<Fondo> fondi = new List<Fondo>();
             try
             {
-                var binanceClient = new BinanceClient(apiClient);
+                var binanceClient = new BinanceClient(_apiClient);
                 AccountInfo ris = await binanceClient.GetAccountInfo();
                 Binance.API.Csharp.Client.Models.Market.Balance[] risArray = ris.Balances.ToArray();
 
@@ -36,7 +38,9 @@ namespace GestoriAPI
                     if (risArray[i].Free != 0 || risArray[i].Locked != 0)
                     {
                         decimal quantità = Convert.ToDecimal(risArray[i].Free + risArray[i].Locked);
-                        fondi.Add(new Valuta(risArray[i].Asset, risArray[i].Asset, quantità));
+                        Valuta valuta = _factory.OttieniValuta(risArray[i].Asset);
+                        Fondo fondo = new Fondo(valuta, quantità);
+                        fondi.Add(fondo);
                     }
                 }
             }
