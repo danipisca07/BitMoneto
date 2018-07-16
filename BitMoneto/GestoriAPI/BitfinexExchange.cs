@@ -46,7 +46,7 @@ namespace GestoriAPI
                 }
                 catch (Exception e)
                 {
-                    throw new EccezioneApi("Errore durante il collegamento: " + e.Message);
+                    throw new EccezioneApi("BitfinexExchange(ScaricaFondi()): Errore durante il collegamento: " + e.Message);
                 }
             });
             return fondi;

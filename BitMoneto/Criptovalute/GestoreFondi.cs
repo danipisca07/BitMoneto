@@ -21,6 +21,8 @@ namespace Criptovalute
         public GestoreFondi()
         {
             _fondi = new ConcurrentDictionary<string, List<Fondo>>();
+            _exchanges = new List<IExchange>();
+            _blockchains = new List<IBlockchain>();
         }
 
 
@@ -65,13 +67,13 @@ namespace Criptovalute
 
         private async Task AggiornaExchanges()
         {
-            var tasks = _exchanges.Select(async exchange =>
-            {
-                List<Fondo> tmp = await exchange.ScaricaFondi();
-                if (!_fondi.TryAdd(exchange.Nome, tmp))
-                    throw new Exception("errore aggiunta fondi in Gestore API");
-            });
-            await Task.WhenAll(tasks);
+             var tasks = _exchanges.Select(async exchange =>
+             {
+                 List<Fondo> tmp = await exchange.ScaricaFondi();
+                 if (!_fondi.TryAdd(exchange.Nome, tmp))
+                     throw new Exception("Gestore fondi(AggiornaExchanges()): errore aggiunta fondi");
+             });
+             await Task.WhenAll(tasks);
         }
         #endregion
 
@@ -100,7 +102,7 @@ namespace Criptovalute
             {
                 Portafoglio tmp = await blockchain.ScaricaPortafoglio();
                 if (!_fondi.TryAdd(blockchain.Nome, new List<Fondo> { tmp.Fondo }))
-                    throw new Exception("errore aggiunta fondi in Gestore API");
+                    throw new Exception("Gestore fondi(AggiornaBlockchains()):errore aggiunta fondi");
             });
             await Task.WhenAll(tasks);
         }

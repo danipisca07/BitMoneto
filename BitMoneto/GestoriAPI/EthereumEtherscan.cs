@@ -20,25 +20,21 @@ namespace GestoriAPI
         {
             if (indirizzo == null || indirizzo == "")
                 throw new ArgumentException("Indirizzo non valido");
-            if(factory == null)
-                throw new ArgumentException("factory non può essere null!");
             Indirizzo = indirizzo;
-            _factory = factory;
+            _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }
 
         public async Task<Portafoglio> ScaricaPortafoglio()
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://api.etherscan.io/api");
+            HttpClient client = new HttpClient() { BaseAddress = new Uri("https://api.etherscan.io/api") };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage risposta = await client.GetAsync("?module=account&action=balance&address=" + Indirizzo);
             if (risposta.IsSuccessStatusCode)
             {
                 String contenuto = await risposta.Content.ReadAsStringAsync();
                 var json = Json.Decode(contenuto);
-
-                decimal quantità;
-                if (!Decimal.TryParse(json["result"], out quantità))
+                
+                if (!Decimal.TryParse(json["result"], out decimal quantità))
                 {
                     throw new EccezioneApi("Valore non valido");
                 }
@@ -50,7 +46,7 @@ namespace GestoriAPI
             }
             else
             {
-                throw new EccezioneApi("Errore chiamata API, codice:" + risposta.StatusCode);
+                throw new EccezioneApi("EthereumEtherscan(ScaricaPortafoglio()):Errore chiamata API, codice:" + risposta.StatusCode);
             }
         }
     }

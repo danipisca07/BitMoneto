@@ -5,8 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BitMoneto"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="800" Width="1280" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
-        
+        <TabControl HorizontalAlignment="Left" Margin="20,10" Height="Auto" Width="1240">
+            <TabItem Header="Fondi">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="80px"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer>
+                        <StackPanel Name="ContenitoreDati" Grid.Row="0">
+                            
+                        </StackPanel>
+                    </ScrollViewer>
+                    <StackPanel Grid.Row="1" Width="Auto" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnAggiornaFondi" Margin="10px" Height="60px" Width="350px" FontSize="30px" Content="Aggiorna Fondi" Click="btnAggiornaFondi_Click" />
+                        <ProgressBar Name="prgAggiornaFondi" Margin="40px,10px" Height="50px" Width="150px"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Impostazioni">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>

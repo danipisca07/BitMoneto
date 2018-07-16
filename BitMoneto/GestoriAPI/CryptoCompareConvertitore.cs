@@ -49,7 +49,7 @@ namespace GestoriAPI
                 {
                     if (!Decimal.TryParse(json[valuta].ToString(), out decimal cambio))
                     {
-                        throw new EccezioneApi("Valore non valido");
+                        throw new EccezioneApi("CryptoCompareConvertitore(ScaricaCambi()): Valore non valido");
                     }
                     cambi.Add(valuta, cambio);
                 }
@@ -58,7 +58,7 @@ namespace GestoriAPI
             }
             else
             {
-                throw new EccezioneApi("Errore chiamata API, codice:" + risposta.StatusCode);
+                throw new EccezioneApi("CryptoCompareConvertitore(ScaricaCambi()):Errore chiamata API, codice:" + risposta.StatusCode);
             }
         }
 
@@ -78,7 +78,7 @@ namespace GestoriAPI
                 }
                 else
                 {
-                    throw new EccezioneApi("Errore chiamata API, codice:" + risposta.StatusCode);
+                    throw new EccezioneApi("CryptoCompareConvertitore(ScaricaSimboli()):Errore chiamata API, codice:" + risposta.StatusCode);
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace GestoriAPI
                 metadata = _listaSimboli[simbolo.Substring(0, 3)];
 
             if (metadata == null)
-                throw new EccezioneApi("Errore: valuta sconosciuta");
+                throw new EccezioneApi("CryptoCompareConvertitore(NomeValutaDaSimbolo()):Errore: valuta sconosciuta");
 
             return metadata["CoinName"];
         }

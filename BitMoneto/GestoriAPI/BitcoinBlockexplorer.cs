@@ -46,7 +46,7 @@ namespace GestoriAPI
             }
             else
             {
-                throw new EccezioneApi("Errore chiamata API, codice:" + risposta.StatusCode);
+                throw new EccezioneApi("BitcoinBlockExplorer(ScaricaPortafoglio()):Errore chiamata API, codice HTTP:" + risposta.StatusCode);
             }
         }
 

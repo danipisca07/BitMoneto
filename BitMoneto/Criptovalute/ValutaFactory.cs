@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Criptovalute
@@ -17,7 +17,7 @@ namespace Criptovalute
             _valute = new Dictionary<string, Valuta>();
         }
 
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Valuta OttieniValuta(String simbolo)
         {
             simbolo = simbolo.ToUpper();

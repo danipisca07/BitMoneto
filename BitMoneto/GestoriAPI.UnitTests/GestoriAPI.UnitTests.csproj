@@ -54,6 +54,7 @@
     <Compile Include="BinanceExchangeTests.cs" />
     <Compile Include="CryptoCompareConvertitoreTests.cs" />
     <Compile Include="BitfinexExchangeTests.cs" />
+    <Compile Include="GestoreFondiTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
