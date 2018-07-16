@@ -8,10 +8,13 @@ using Criptovalute;
 
 namespace GestoriAPI
 {
-    public class BitfinexExchange : Criptovalute.Exchange
+    public class BitfinexExchange : Criptovalute.IExchange
     {
         private readonly BitfinexApi _apiClient;
         private readonly ValutaFactory _factory;
+
+        public string Nome { get { return "Bitfinex";  } }
+
         public BitfinexExchange(String publicKey, String privateKey, ValutaFactory factory)
         {
             if (publicKey == null || publicKey == "" || privateKey == null || privateKey == "")
@@ -19,7 +22,7 @@ namespace GestoriAPI
             _apiClient = new BitfinexApi(publicKey, privateKey);
             _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }
-
+        
         public async Task<List<Fondo>> ScaricaFondi()
         {
             List<Fondo> fondi = new List<Fondo>();
@@ -48,5 +51,23 @@ namespace GestoriAPI
             });
             return fondi;
         }
+
+        public override bool Equals(object obj)
+        {
+            var exchange = obj as BitfinexExchange;
+            return exchange != null &&
+                  _apiClient.Equals(exchange._apiClient) &&
+                  _factory.Equals(exchange._factory);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1016245487;
+            hashCode = hashCode * -1521134295 + _apiClient.GetHashCode();
+            hashCode = hashCode * -1521134295 + _factory.GetHashCode();
+            return hashCode;
+        }
+
+
     }
 }

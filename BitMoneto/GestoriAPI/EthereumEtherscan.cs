@@ -10,10 +10,12 @@ using Criptovalute;
 
 namespace GestoriAPI
 {
-    public class EthereumEtherscan : Criptovalute.Blockchain
+    public class EthereumEtherscan : Criptovalute.IBlockchain
     {
         private ValutaFactory _factory;
         public String Indirizzo { get; }
+        public string Nome { get { return "Ethereum(" + Indirizzo + ")"; } }
+
         public EthereumEtherscan(String indirizzo, ValutaFactory factory)
         {
             if (indirizzo == null || indirizzo == "")

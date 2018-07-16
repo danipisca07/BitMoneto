@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Criptovalute
 {
-    public interface Exchange
+    public interface IBlockchain
     {
-        Task<List<Fondo>> ScaricaFondi();
+        String Nome { get; }
+        Task<Portafoglio> ScaricaPortafoglio();
     }
 }

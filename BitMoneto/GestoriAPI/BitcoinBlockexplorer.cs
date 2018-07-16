@@ -8,10 +8,12 @@ using Criptovalute;
 
 namespace GestoriAPI
 {
-    public class BitcoinBlockexplorer : Criptovalute.Blockchain
+    public class BitcoinBlockexplorer : Criptovalute.IBlockchain
     {
         private readonly ValutaFactory _factory;
         public String Indirizzo { get; }
+
+        public string Nome { get { return "Bitcoin(" + Indirizzo + ")"; } }
 
         public BitcoinBlockexplorer(String indirizzo,ValutaFactory factory)
         {
@@ -46,6 +48,19 @@ namespace GestoriAPI
             {
                 throw new EccezioneApi("Errore chiamata API, codice:" + risposta.StatusCode);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var blockexplorer = obj as BitcoinBlockexplorer;
+            return blockexplorer != null && Indirizzo == blockexplorer.Indirizzo;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -904650435;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Indirizzo);
+            return hashCode;
         }
     }
 }
