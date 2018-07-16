@@ -44,60 +44,105 @@ namespace BitMoneto
             gestoreFondi.AggiungiBlockchain(eth);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //this.AggiornaFondi();
+            await AggiornaFondi();
         }
 
         private async Task AggiornaFondi()
         {
-            await Task.Run(async () =>
+            prgAggiornaFondi.IsIndeterminate = true;
+            try
             {
-                await gestoreFondi.AggiornaFondi();
-                //Thread.Sleep(1000);
-                await Dispatcher.BeginInvoke(new Action(() =>
+                await Task.Run(async () =>
                 {
-                    ContenitoreDati.Children.Clear();
-                    Dictionary<string, List<Fondo>> fondi = gestoreFondi.Fondi;
-                    foreach (string nome in fondi.Keys)
+                    await gestoreFondi.AggiornaFondi();
+                    await Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        bool ok = fondi.TryGetValue(nome, out List<Fondo> valori);
-                        if (ok) AggiungiDati(nome, valori);
-                    }
-                    prgAggiornaFondi.IsIndeterminate = false;
-                }));
-            });
+                        ContenitoreDati.Children.Clear();
+                        Dictionary<string, List<Fondo>> fondi = gestoreFondi.Fondi;
+                        foreach (string nome in fondi.Keys)
+                        {
+                            bool ok = fondi.TryGetValue(nome, out List<Fondo> valori);
+                            if (ok) AggiungiDati(nome, valori);
+                        }
+                        prgAggiornaFondi.IsIndeterminate = false;
+                    }));
+                });
+            }
+            catch (Exception eccezione)
+            {
+                MessageBox.Show("errore: " + eccezione.Message, "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            
         }
 
         private void AggiungiDati(string nome, List<Fondo> valori)
         {
             DockPanel pannelloDati = new DockPanel() { LastChildFill = true, Name = "bncPanel" };
-            TextBlock titoloDati = new TextBlock() { Text = "Binance" };
+            TextBlock titoloDati = new TextBlock() { Text = nome };
             DockPanel.SetDock(titoloDati, Dock.Top);
             pannelloDati.Children.Add(titoloDati);
-            DataGrid dati = new DataGrid();
+            DataGrid dati = new DataGrid
+            {
+                ItemsSource = valori,
+                AutoGenerateColumns = false
+            };
 
-            /*      await Dispatcher.BeginInvoke(new Action(() =>
-              *    {
-               *       bncData.ItemsSource = bncBalances;
-                *  }));
-                */
-            dati.ItemsSource = valori;
+            var colonnaNome = new DataGridTextColumn
+            {
+                Binding = new Binding("Valuta.Nome"),
+                Header = "Nome",
+                Width = DataGridLength.Auto
+            };
+            dati.Columns.Add(colonnaNome);
+
+            var colonnaSimbolo = new DataGridTextColumn
+            {
+                Binding = new Binding("Valuta.Simbolo"),
+                Header = "Simbolo",
+                Width = DataGridLength.Auto
+            };
+            dati.Columns.Add(colonnaSimbolo);
+
+            var colonnaQuantità = new DataGridTextColumn
+            {
+                Binding = new Binding("Quantità"),
+                Header = "Quantità",
+                Width = DataGridLength.Auto
+            };
+            dati.Columns.Add(colonnaQuantità);
+
+            foreach(string s in valori.ElementAt(0).Valuta.Cambi.Keys.ToList())
+            {
+                var colConv = new DataGridTextColumn
+                {
+                    Header = "Valore(" + s + ")",
+                    Width = DataGridLength.Auto
+                };
+                var binding = new Binding();
+                CambioConverter cambioConverter = new CambioConverter(s);
+                binding.Converter = cambioConverter;
+                colConv.Binding = binding;
+                dati.Columns.Add(colConv);
+            }
+            
+
             pannelloDati.Children.Add(dati);
             ContenitoreDati.Children.Add(pannelloDati);
         }
 
         private async void btnAggiornaFondi_Click(object sender, RoutedEventArgs e)
         {
-            prgAggiornaFondi.IsIndeterminate = true;
-            try
-            {
-                await AggiornaFondi();
-            }
-            catch (Exception eccezione)
-            {
-                MessageBox.Show("errore: " + eccezione.Message,"Errore", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            await AggiornaFondi();
+        }
+
+        private void ScrollViewerDati_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

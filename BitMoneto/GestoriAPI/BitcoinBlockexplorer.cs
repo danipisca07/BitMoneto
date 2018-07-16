@@ -19,23 +19,22 @@ namespace GestoriAPI
         {
             if (indirizzo == null || indirizzo == "")
                 throw new ArgumentException("Indirizzo non valido");
-            if(factory == null)
-                throw new ArgumentException("factory non può essere null");
             Indirizzo = indirizzo;
-            _factory = factory;
+            _factory = factory ?? throw new ArgumentException("factory non può essere null");
         }
 
         public async Task<Portafoglio> ScaricaPortafoglio()
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("https://blockexplorer.com/api/addr/");
+            HttpClient client = new HttpClient
+            {
+                BaseAddress = new Uri("https://blockexplorer.com/api/addr/")
+            };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage risposta = await client.GetAsync(Indirizzo + "/balance");
             if (risposta.IsSuccessStatusCode)
             {
                 String contenuto = await risposta.Content.ReadAsStringAsync();
-                decimal quantità;
-                if (!Decimal.TryParse(contenuto, out quantità))
+                if (!Decimal.TryParse(contenuto, out decimal quantità))
                 {
                     throw new EccezioneApi("Valore non valido");
                 }

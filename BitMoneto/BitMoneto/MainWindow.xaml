@@ -14,14 +14,16 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="80px"/>
                     </Grid.RowDefinitions>
-                    <ScrollViewer>
+                    <ScrollViewer Name="ScrollViewerDati" PreviewMouseWheel="ScrollViewerDati_PreviewMouseWheel">
                         <StackPanel Name="ContenitoreDati" Grid.Row="0">
-                            
+                            <DataGrid>
+                                
+                            </DataGrid>
                         </StackPanel>
                     </ScrollViewer>
                     <StackPanel Grid.Row="1" Width="Auto" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnAggiornaFondi" Margin="10px" Height="60px" Width="350px" FontSize="30px" Content="Aggiorna Fondi" Click="btnAggiornaFondi_Click" />
-                        <ProgressBar Name="prgAggiornaFondi" Margin="40px,10px" Height="50px" Width="150px"/>
+                        <ProgressBar Name="prgAggiornaFondi" Margin="40px,10px" Height="40px" Width="150px"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
