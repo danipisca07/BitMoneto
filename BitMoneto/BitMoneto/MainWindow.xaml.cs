@@ -52,9 +52,9 @@ namespace BitMoneto
         private async Task AggiornaFondi()
         {
             prgAggiornaFondi.IsIndeterminate = true;
-            try
+            await Task.Run(async () =>
             {
-                await Task.Run(async () =>
+                try
                 {
                     await gestoreFondi.AggiornaFondi();
                     await Dispatcher.BeginInvoke(new Action(() =>
@@ -68,14 +68,12 @@ namespace BitMoneto
                         }
                         prgAggiornaFondi.IsIndeterminate = false;
                     }));
-                });
-            }
-            catch (Exception eccezione)
-            {
-                MessageBox.Show("errore: " + eccezione.Message, "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            
+                }
+                catch (Exception eccezione)
+                {
+                    MessageBox.Show("errore: " + eccezione.Message, "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
         }
 
         private void AggiungiDati(string nome, List<Fondo> valori)
@@ -87,7 +85,10 @@ namespace BitMoneto
             DataGrid dati = new DataGrid
             {
                 ItemsSource = valori,
-                AutoGenerateColumns = false
+                AutoGenerateColumns = false,
+                CanUserAddRows = false,
+                CanUserDeleteRows = false,
+                IsReadOnly = true
             };
 
             var colonnaNome = new DataGridTextColumn
@@ -114,7 +115,7 @@ namespace BitMoneto
             };
             dati.Columns.Add(colonnaQuantità);
 
-            foreach(string s in valori.ElementAt(0).Valuta.Cambi.Keys.ToList())
+            foreach(string s in convertitore.SimboliConversioni)
             {
                 var colConv = new DataGridTextColumn
                 {
