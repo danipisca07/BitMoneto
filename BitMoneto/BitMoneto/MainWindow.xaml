@@ -28,7 +28,39 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Impostazioni">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <GroupBox Header="Password">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Password: " Margin="20"/>
+                                <TextBox Name="PasswordTxt" Margin="20" Width="120"/>
+                                <Button Name="SalvaPasswordBtn" Margin="20" Content="Salva" Click="SalvaPasswordBtn_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Binance">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Chiave Pubblica: " Margin="20"/>
+                                <TextBox Name="BinancePubblicaTxt" Margin="20" Width="120"/>
+                                <Label Content="Chiave Privata: " Margin="20"/>
+                                <TextBox Name="BinancePrivataTxt" Margin="20" Width="120"/>
+                                <Button Name="SalvaBinanceBtn" Margin="20" Content="Salva" Click="SalvaBinanceBtn_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Bitcoin">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Indirizzo: " Margin="20"/>
+                                <TextBox Name="BitcoinTxt" Margin="20" Width="120"/>
+                                <Button Name="SalvaBitcoinBtn" Margin="20" Content="Salva" Click="SalvaBitcoinBtn_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                        
+                        
+                    </StackPanel>
+                    <StackPanel Name="PannelloOperazione" Visibility="Hidden" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <Label Name="EtichettaOperazione" Content=""/>
+                        <ProgressBar IsIndeterminate="True" Height="30" Width="120"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
         </TabControl>
 

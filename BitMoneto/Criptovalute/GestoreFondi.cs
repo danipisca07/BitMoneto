@@ -54,6 +54,8 @@ namespace Criptovalute
         /// <returns>True: Exchange trovato e eliminato, False: non è stato trovato un exchange del tipo indicato</returns>
         public bool RimuoviExchange(Type tipoExchange)
         {
+            if (_exchanges.Count == 0)
+                return false;
             IExchange daRimuovere = _exchanges.First<IExchange>(elemento => elemento.GetType() == tipoExchange);
             if (daRimuovere != null)
             {
@@ -94,6 +96,13 @@ namespace Criptovalute
             }
             else
                 return false;
+        }
+
+        public bool RimuoviBlockchain(IBlockchain blockchain)
+        {
+            if (_blockchains.Count == 0)
+                return false;
+            return _blockchains.Remove(blockchain);
         }
 
         private async Task AggiornaBlockchains()

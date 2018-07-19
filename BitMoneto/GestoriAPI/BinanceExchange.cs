@@ -21,8 +21,8 @@ namespace GestoriAPI
 
         public BinanceExchange(string publicKey, string privateKey, ValutaFactory factory)
         {
-            if (publicKey == null || publicKey == "" || privateKey == null || privateKey == "")
-                throw new ArgumentException("chiavi non valide!");
+            if (publicKey == null || publicKey.Length != 64 || privateKey == null || privateKey.Length != 64)
+                throw new ArgumentException("Binance: chiavi non valide!");
             _apiClient = new ApiClient(publicKey, privateKey);
             _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }
@@ -52,6 +52,13 @@ namespace GestoriAPI
                 throw new EccezioneApi("BinanceExchange(ScaricaFondi()): Errore durante il collegamento: " + e.Message);
             }
             return fondi;
+        }
+
+        public async Task<bool> Test()
+        {
+            BinanceClient binanceClient = new BinanceClient(_apiClient);
+            dynamic test = await binanceClient.TestConnectivity();
+            return true;
         }
 
         public override bool Equals(object obj)

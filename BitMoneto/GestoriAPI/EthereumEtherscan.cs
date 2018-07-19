@@ -49,5 +49,21 @@ namespace GestoriAPI
                 throw new EccezioneApi("EthereumEtherscan(ScaricaPortafoglio()):Errore chiamata API, codice:" + risposta.StatusCode);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            var etherscan = obj as EthereumEtherscan;
+            return etherscan != null &&
+                   Indirizzo == etherscan.Indirizzo &&
+                   Nome == etherscan.Nome;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1748475525;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Indirizzo);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Nome);
+            return hashCode;
+        }
     }
 }

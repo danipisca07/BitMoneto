@@ -26,14 +26,22 @@ namespace BitMoneto
         ValutaFactory valutaFactory;
         IConvertitore convertitore;
         GestoreFondi gestoreFondi;
-        public MainWindow()
+        string password;
+        public MainWindow(string password)
         {
             InitializeComponent();
+            this.password = password;
             convertitore = new CryptoCompareConvertitore();
             valutaFactory = new ValutaFactory(convertitore);
             gestoreFondi = new GestoreFondi();
-            BitfinexExchange bitfinex = new BitfinexExchange("5RMqfG7b2qOBkoPIi97UjCpPxnIhAUsDMelbT5K3pB2", 
-                "hnQNJgD80w1WJeZW7zclyJvFkTWNSN0N4r98t7oRrWw", valutaFactory);
+            //TestInizializza();
+            CaricaApi();
+        }
+
+        private void TestInizializza()
+        {
+            BitfinexExchange bitfinex = new BitfinexExchange("5RMqfG7b2qOBkoPIi97UjCpPxnIhAUsDMelbT5K3pB2",
+                            "hnQNJgD80w1WJeZW7zclyJvFkTWNSN0N4r98t7oRrWw", valutaFactory);
             gestoreFondi.AggiungiExchange(bitfinex);
             BinanceExchange binance = new BinanceExchange("VhP4edkGMEmL51YSIXSdva0IkcGxC68r8dOIGg6G5PcNMr3srPcm4rXEled5KeMs",
                 "1ET6MkbrkS2U1sIvQDu6gDzYzNuYgPX2ujG2Lt8tL5SFTygMKUeyDRFDJPT8Ry6Y", valutaFactory);
@@ -48,6 +56,8 @@ namespace BitMoneto
         {
             await AggiornaFondi();
         }
+
+        #region Fondi
 
         private async Task AggiornaFondi()
         {
@@ -66,12 +76,15 @@ namespace BitMoneto
                             bool ok = fondi.TryGetValue(nome, out List<Fondo> valori);
                             if (ok) AggiungiDati(nome, valori);
                         }
-                        prgAggiornaFondi.IsIndeterminate = false;
                     }));
                 }
                 catch (Exception eccezione)
                 {
                     MessageBox.Show("errore: " + eccezione.Message, "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    prgAggiornaFondi.IsIndeterminate = false;
                 }
             });
         }
@@ -145,5 +158,81 @@ namespace BitMoneto
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
+
+        #endregion
+
+        #region Impostazioni
+
+
+        private void CaricaApi()
+        {
+            BinanceExchange binance = GestoreImpostazioni.LeggiDatiApi<BinanceExchange>(new object[] { valutaFactory });
+            if (binance != null)
+            {
+                gestoreFondi.AggiungiExchange(binance);
+            }
+            BitcoinBlockexplorer bitcoin = GestoreImpostazioni.LeggiDatiApi<BitcoinBlockexplorer>(new object[] { valutaFactory });
+            if (bitcoin != null)
+            {
+                gestoreFondi.AggiungiBlockchain(bitcoin);
+            }
+        }
+
+        private void SalvaPasswordBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string password = PasswordTxt.Text;
+            if(password == null || password == "")
+            {
+                MessageBox.Show("Inserire prima una password");
+            }
+            else
+            {
+                GestoreImpostazioni.SalvaPassword(password);
+                MessageBox.Show("Password Salvata");
+            }
+        }
+
+        private void SalvaBinanceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string apiPub = BinancePubblicaTxt.Text;
+            string apiPriv = BinancePrivataTxt.Text;
+            try
+            {
+                BinanceExchange binance = new BinanceExchange(apiPub, apiPriv, valutaFactory);
+                gestoreFondi.RimuoviExchange(binance.GetType());
+                gestoreFondi.AggiungiExchange(binance);
+                GestoreImpostazioni.SalvaDatiApi<BinanceExchange>(new string[] { apiPub, apiPriv });
+                MessageBox.Show("Chiavi api salvate. Avviato aggiornamento fondi");
+                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+            }
+            catch (ArgumentException eccezione)
+            {
+                MessageBox.Show(eccezione.Message);
+            }
+        }
+
+        private void SalvaBitcoinBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string indirizzo = BitcoinTxt.Text;
+            try
+            {
+                BitcoinBlockexplorer bitcoin = new BitcoinBlockexplorer(indirizzo, valutaFactory);
+                gestoreFondi.AggiungiBlockchain(bitcoin);
+                GestoreImpostazioni.SalvaDatiApi<BinanceExchange>(new string[] { indirizzo });
+                MessageBox.Show("Indirizzo salvato. Avviato aggiornamento fondi");
+                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+            }
+            catch (ArgumentException eccezione)
+            {
+                MessageBox.Show(eccezione.Message);
+            }
+        }
+
+
+        #endregion
+
+
+
+
     }
 }
