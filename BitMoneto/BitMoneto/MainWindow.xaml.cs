@@ -202,16 +202,35 @@ namespace BitMoneto
             try
             {
                 BinanceExchange binance = new BinanceExchange(apiPub, apiPriv, valutaFactory);
-                gestoreFondi.RimuoviExchange(binance.GetType());
-                gestoreFondi.AggiungiExchange(binance);
-                GestoreImpostazioni.SalvaDatiApi<BinanceExchange>(new string[] { apiPub, apiPriv });
-                MessageBox.Show("Chiavi api salvate. Avviato aggiornamento fondi");
-                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                if(gestoreFondi.AggiungiExchange(binance))
+                {
+                    GestoreImpostazioni.SalvaDatiApi<BinanceExchange>(new string[] { apiPub, apiPriv });
+                    Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                    MessageBox.Show("Chiavi api salvate. Avviato aggiornamento fondi");
+                }
+                else
+                {
+                    MessageBox.Show("Ci sono già delle chiavi API associate per binance, rimuoverle prima di aggiungerne delle altre.");
+                }
+                
             }
             catch (ArgumentException eccezione)
             {
                 MessageBox.Show(eccezione.Message);
             }
+        }
+
+        private void RimuoviBinanceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            bool rimossoDaGestore = gestoreFondi.RimuoviExchange(typeof(BinanceExchange));
+            bool rimossoDaConfigurazione = GestoreImpostazioni.RimuoviDatiApi<BinanceExchange>();
+            if (rimossoDaGestore || rimossoDaConfigurazione)
+            {
+                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                MessageBox.Show("Exchange rimosso correttamente.");
+            }
+            else
+                MessageBox.Show("Non ci sono attualmente chiavi associate per Binance.");
         }
 
         private void SalvaBitcoinBtn_Click(object sender, RoutedEventArgs e)
@@ -220,11 +239,16 @@ namespace BitMoneto
             try
             {
                 BitcoinBlockexplorer bitcoin = new BitcoinBlockexplorer(indirizzo, valutaFactory);
-                gestoreFondi.RimuoviBlockchain(bitcoin);
-                gestoreFondi.AggiungiBlockchain(bitcoin);
-                GestoreImpostazioni.SalvaDatiApi<BitcoinBlockexplorer>(new string[] { indirizzo });
-                MessageBox.Show("Indirizzo salvato. Avviato aggiornamento fondi");
-                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                if(gestoreFondi.AggiungiBlockchain(bitcoin))
+                {
+                    GestoreImpostazioni.SalvaDatiApi<BitcoinBlockexplorer>(new string[] { indirizzo });
+                    MessageBox.Show("Indirizzo salvato. Avviato aggiornamento fondi");
+                    Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                }
+                else
+                {
+                    MessageBox.Show("Esiste già un indirizzo associato, rimuoverlo prima di aggiungerne un altro.");
+                }
             }
             catch (ArgumentException eccezione)
             {
@@ -232,10 +256,20 @@ namespace BitMoneto
             }
         }
 
+        private void RimuoviBitcoinBtn_Click(object sender, RoutedEventArgs e)
+        {
+            bool rimossoDaGestore = gestoreFondi.RimuoviBlockchain(typeof(BitcoinBlockexplorer));
+            bool rimossoDaConfigurazione = GestoreImpostazioni.RimuoviDatiApi<BinanceExchange>();
+            if (rimossoDaGestore || rimossoDaConfigurazione)
+            {
+                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                MessageBox.Show("Protafoglio rimosso correttamente.");
+            }
+            else
+                MessageBox.Show("Non ci sono attualmente indirizzi associati.");
+        }
 
         #endregion
-
-
 
 
     }

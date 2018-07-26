@@ -44,6 +44,7 @@
                                 <Label Content="Chiave Privata: " Margin="20"/>
                                 <TextBox Name="BinancePrivataTxt" Margin="20" Width="120"/>
                                 <Button Name="SalvaBinanceBtn" Margin="20" Content="Salva" Click="SalvaBinanceBtn_Click"/>
+                                <Button Name="RimuoviBinanceBtn" Margin="20" Content="Rimuovi" Click="RimuoviBinanceBtn_Click"/>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="Bitcoin">
@@ -51,6 +52,7 @@
                                 <Label Content="Indirizzo: " Margin="20"/>
                                 <TextBox Name="BitcoinTxt" Margin="20" Width="120"/>
                                 <Button Name="SalvaBitcoinBtn" Margin="20" Content="Salva" Click="SalvaBitcoinBtn_Click"/>
+                                <Button Name="RimuoviBitcoinBtn" Margin="20" Content="Rimuovi" Click="RimuoviBitcoinBtn_Click"/>
                             </StackPanel>
                         </GroupBox>
                         

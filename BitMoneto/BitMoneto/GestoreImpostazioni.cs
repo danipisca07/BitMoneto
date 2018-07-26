@@ -162,5 +162,20 @@ namespace BitMoneto
             }
         }
 
+        public static bool RimuoviDatiApi<T>()
+        {
+            ConfigurationManager.RefreshSection("appSettings");
+            var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+            string nomeClasse = typeof(T).FullName;
+            if (configurazione.AppSettings.Settings[nomeClasse] != null)
+            {
+                configurazione.AppSettings.Settings.Remove(nomeClasse);
+                configurazione.Save();
+                return true;
+            }
+            else
+                return false;
+        }
+
     }
 }

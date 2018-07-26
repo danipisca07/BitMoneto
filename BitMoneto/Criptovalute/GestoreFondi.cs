@@ -56,15 +56,8 @@ namespace Criptovalute
         {
             if (_exchanges.Count == 0)
                 return false;
-            IExchange daRimuovere = _exchanges.First<IExchange>(elemento => elemento.GetType() == tipoExchange);
-            if (daRimuovere != null)
-            {
-                _exchanges.Remove(daRimuovere);
-                return true;
-            }
-            else
-                return false;
-            
+            return _exchanges.RemoveAll((elem) => { return tipoExchange == elem.GetType(); }) > 0;
+
         }
 
         private async Task AggiornaExchanges()
@@ -88,8 +81,8 @@ namespace Criptovalute
         /// <returns>True: Aggiunto, False: Elemento già presente</returns>
         public bool AggiungiBlockchain(IBlockchain blockchain)
         {
-            //Controllo che non esista già un instanza di blockchain con lo stesso indirizzo nella lista
-            if (!_blockchains.Contains(blockchain))
+            //Controllo che non esista già un instanza della stessa blockchain
+            if (_blockchains.All<IBlockchain>(elemento => elemento.GetType() != blockchain.GetType()))
             {
                 _blockchains.Add(blockchain);
                 return true;
@@ -98,11 +91,11 @@ namespace Criptovalute
                 return false;
         }
 
-        public bool RimuoviBlockchain(IBlockchain blockchain)
+        public bool RimuoviBlockchain(Type tipoBlockchain)
         {
             if (_blockchains.Count == 0)
                 return false;
-            return _blockchains.RemoveAll( (elem) => { return blockchain.GetType() == elem.GetType(); }) > 0;
+            return _blockchains.RemoveAll( (elem) => { return tipoBlockchain == elem.GetType(); }) > 0;
         }
 
         private async Task AggiornaBlockchains()
