@@ -63,7 +63,7 @@ namespace GestoriAPI.UnitTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void ScaricaFondi_ChiaviErrate_Eccezzione()
         {
             BinanceExchange explorer = new BinanceExchange("blabla", "blabla",factory);

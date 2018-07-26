@@ -102,7 +102,7 @@ namespace Criptovalute
         {
             if (_blockchains.Count == 0)
                 return false;
-            return _blockchains.Remove(blockchain);
+            return _blockchains.RemoveAll( (elem) => { return blockchain.GetType() == elem.GetType(); }) > 0;
         }
 
         private async Task AggiornaBlockchains()

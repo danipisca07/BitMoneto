@@ -84,7 +84,10 @@ namespace BitMoneto
                 }
                 finally
                 {
-                    prgAggiornaFondi.IsIndeterminate = false;
+                    await Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        prgAggiornaFondi.IsIndeterminate = false;
+                    }));
                 }
             });
         }
@@ -217,8 +220,9 @@ namespace BitMoneto
             try
             {
                 BitcoinBlockexplorer bitcoin = new BitcoinBlockexplorer(indirizzo, valutaFactory);
+                gestoreFondi.RimuoviBlockchain(bitcoin);
                 gestoreFondi.AggiungiBlockchain(bitcoin);
-                GestoreImpostazioni.SalvaDatiApi<BinanceExchange>(new string[] { indirizzo });
+                GestoreImpostazioni.SalvaDatiApi<BitcoinBlockexplorer>(new string[] { indirizzo });
                 MessageBox.Show("Indirizzo salvato. Avviato aggiornamento fondi");
                 Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
             }

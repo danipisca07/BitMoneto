@@ -78,19 +78,7 @@ namespace GestoriAPI.UnitTests
             ok = cambi.TryGetValue("EUR", out ris);
             Assert.IsTrue(ok);
         }
-
-        [TestMethod]
-        public void ScaricaCambi_ETHinBTCeADA_OK()
-        {
-            CryptoCompareConvertitore conv = new CryptoCompareConvertitore();
-            Dictionary<String, decimal> cambi = conv.ScaricaCambi("ETH", new String[] { "BTC", "ADA" }).Result;
-            Assert.AreEqual<int>(cambi.Count, 2);
-            decimal ris;
-            bool ok = cambi.TryGetValue("BTC", out ris);
-            Assert.IsTrue(ok);
-            ok = cambi.TryGetValue("ADA", out ris);
-            Assert.IsTrue(ok);
-        }
+        
 
         [TestMethod]
         public void NomeValutaDaSimbolo_BTC_Bitcoin()

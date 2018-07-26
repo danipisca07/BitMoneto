@@ -39,8 +39,9 @@
     <Reference Include="Binance.API.Csharp.Client.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Binance.API.Csharp.Client.1.4.0\lib\net46\Binance.API.Csharp.Client.Models.dll</HintPath>
     </Reference>
-    <Reference Include="BitfinexApi">
-      <HintPath>I:\Dani\SmartCoinTracker\CryptoMarketApi-master\CryptoMarketApi-master\Api\BitfinexApi\bin\Debug\BitfinexApi.dll</HintPath>
+    <Reference Include="BitfinexApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\BitfinexApi.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -91,6 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dependencies\BitfinexApi.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
