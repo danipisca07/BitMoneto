@@ -33,6 +33,18 @@ namespace Criptovalute
             }
         }
 
+        public async Task AggiornaCambi()
+        {
+            //Effettuo una copia della lista delle chiavi sulla quale poi itero per aggiornarne i valori(non posso iterare direttamente sul dizionario
+            // perchè modificando la collezione non posso iterarci sopra
+            string[] chiavi = new string[_valute.Keys.Count];
+            _valute.Keys.CopyTo(chiavi, 0);
+            foreach (string chiave in chiavi)
+            {
+                _valute[chiave] = await TrovaValuta(chiave);
+            }
+        }
+
         private async Task<Valuta> TrovaValuta(String simbolo)
         {
             try

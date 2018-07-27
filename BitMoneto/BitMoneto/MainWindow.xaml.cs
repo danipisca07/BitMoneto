@@ -36,6 +36,7 @@ namespace BitMoneto
             gestoreFondi = new GestoreFondi();
             //TestInizializza();
             CaricaApi();
+            //TODO Aggiungere gestione impostazioni per bitfinex e etherscan
         }
 
         private void TestInizializza()
@@ -66,6 +67,7 @@ namespace BitMoneto
             {
                 try
                 {
+                    await valutaFactory.AggiornaCambi();
                     await gestoreFondi.AggiornaFondi();
                     await Dispatcher.BeginInvoke(new Action(() =>
                     {
