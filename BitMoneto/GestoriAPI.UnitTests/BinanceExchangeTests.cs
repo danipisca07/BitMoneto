@@ -55,11 +55,11 @@ namespace GestoriAPI.UnitTests
         }
 
         [TestMethod]
-        public void ScaricaFondi_ChiaviOk_Array27Valute()
+        public void ScaricaFondi_ChiaviOk_Array28Valute()
         {
             BinanceExchange explorer = new BinanceExchange(pubKey, privKey, factory);
             List<Fondo> ris = explorer.ScaricaFondi().Result;
-            Assert.AreEqual(ris.Count, 27);
+            Assert.AreEqual(ris.Count, 28);
         }
 
         [TestMethod]

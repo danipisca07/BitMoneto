@@ -6,6 +6,11 @@ namespace Criptovalute
 {
     public class Portafoglio
     {
+        public Portafoglio(string indirizzo)
+        {
+            Indirizzo = indirizzo ?? throw new ArgumentNullException(nameof(indirizzo));
+        }
+
         public Portafoglio(string indirizzo, Fondo fondo)
         {
             Indirizzo = indirizzo ?? throw new ArgumentNullException(nameof(indirizzo));
@@ -13,7 +18,7 @@ namespace Criptovalute
         }
 
         public String Indirizzo { get; }
-        public Fondo Fondo { get; }
+        public Fondo Fondo { get; set; }
 
         public override bool Equals(object obj)
         {

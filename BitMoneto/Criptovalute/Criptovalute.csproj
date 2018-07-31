@@ -51,5 +51,8 @@
     <Compile Include="Valuta.cs" />
     <Compile Include="ValutaFactory.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Criptovalute.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

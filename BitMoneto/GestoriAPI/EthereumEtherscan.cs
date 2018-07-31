@@ -13,14 +13,14 @@ namespace GestoriAPI
     public class EthereumEtherscan : Criptovalute.IBlockchain
     {
         private ValutaFactory _factory;
-        public String Indirizzo { get; }
-        public string Nome { get { return "Ethereum(" + Indirizzo + ")"; } }
+        public string Nome { get { return "Ethereum(" + Portafoglio.Indirizzo + ")"; } }
+        public Portafoglio Portafoglio { get; }
 
         public EthereumEtherscan(String indirizzo, ValutaFactory factory)
         {
             if (indirizzo == null || indirizzo == "")
                 throw new ArgumentException("Indirizzo non valido");
-            Indirizzo = indirizzo;
+            Portafoglio = new Portafoglio(indirizzo);
             _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }
 
@@ -28,7 +28,7 @@ namespace GestoriAPI
         {
             HttpClient client = new HttpClient() { BaseAddress = new Uri("https://api.etherscan.io/api") };
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage risposta = await client.GetAsync("?module=account&action=balance&address=" + Indirizzo);
+            HttpResponseMessage risposta = await client.GetAsync("?module=account&action=balance&address=" + Portafoglio.Indirizzo);
             if (risposta.IsSuccessStatusCode)
             {
                 String contenuto = await risposta.Content.ReadAsStringAsync();
@@ -41,8 +41,8 @@ namespace GestoriAPI
                 quantità /= (decimal)Math.Pow(10,18); //Il valore restituito è multiplo, lo riporto a valore unitario
                 Valuta valuta = _factory.OttieniValuta("ETH");
                 Fondo fondo = new Fondo(valuta, quantità);
-                Portafoglio portafoglio = new Portafoglio(Indirizzo, fondo);
-                return portafoglio;
+                Portafoglio.Fondo = fondo;
+                return Portafoglio;
             }
             else
             {
@@ -54,14 +54,14 @@ namespace GestoriAPI
         {
             var etherscan = obj as EthereumEtherscan;
             return etherscan != null &&
-                   Indirizzo == etherscan.Indirizzo &&
+                   Portafoglio == etherscan.Portafoglio &&
                    Nome == etherscan.Nome;
         }
 
         public override int GetHashCode()
         {
             var hashCode = 1748475525;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Indirizzo);
+            hashCode = hashCode * -1521134295 + Portafoglio.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Nome);
             return hashCode;
         }

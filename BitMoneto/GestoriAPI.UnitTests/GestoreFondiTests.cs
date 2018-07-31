@@ -66,14 +66,14 @@ namespace GestoriAPI.UnitTests
         }
 
         [TestMethod]
-        public void AggiornaFondi_Binance_27()
+        public void AggiornaFondi_Binance_28()
         {
             Assert.IsTrue(gestoreFondi.AggiungiExchange(binance));
             gestoreFondi.AggiornaFondi().Wait();
             Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
             Assert.AreEqual<int>(lista.Count, 1);
             Assert.IsTrue(lista.TryGetValue("Binance", out List<Fondo> fondi));
-            Assert.AreEqual<int>(fondi.Count, 27);
+            Assert.AreEqual<int>(fondi.Count, 28);
         }
 
         [TestMethod]

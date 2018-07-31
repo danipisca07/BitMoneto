@@ -63,6 +63,7 @@ namespace BitMoneto
         private async Task AggiornaFondi()
         {
             prgAggiornaFondi.IsIndeterminate = true;
+            //TODO inserire timeout?
             await Task.Run(async () =>
             {
                 try
@@ -171,12 +172,12 @@ namespace BitMoneto
 
         private void CaricaApi()
         {
-            BinanceExchange binance = GestoreImpostazioni.LeggiDatiApi<BinanceExchange>(new object[] { valutaFactory });
+            BinanceExchange binance = GestoreImpostazioni.LeggiDatiExchange<BinanceExchange>(valutaFactory);
             if (binance != null)
             {
                 gestoreFondi.AggiungiExchange(binance);
             }
-            BitcoinBlockexplorer bitcoin = GestoreImpostazioni.LeggiDatiApi<BitcoinBlockexplorer>(new object[] { valutaFactory });
+            BitcoinBlockexplorer bitcoin = GestoreImpostazioni.LeggiDatiBlockchain<BitcoinBlockexplorer>(valutaFactory);
             if (bitcoin != null)
             {
                 gestoreFondi.AggiungiBlockchain(bitcoin);
@@ -206,7 +207,7 @@ namespace BitMoneto
                 BinanceExchange binance = new BinanceExchange(apiPub, apiPriv, valutaFactory);
                 if(gestoreFondi.AggiungiExchange(binance))
                 {
-                    GestoreImpostazioni.SalvaDatiApi<BinanceExchange>(new string[] { apiPub, apiPriv });
+                    GestoreImpostazioni.SalvaDatiExchange(binance);
                     Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
                     MessageBox.Show("Chiavi api salvate. Avviato aggiornamento fondi");
                 }
@@ -243,7 +244,7 @@ namespace BitMoneto
                 BitcoinBlockexplorer bitcoin = new BitcoinBlockexplorer(indirizzo, valutaFactory);
                 if(gestoreFondi.AggiungiBlockchain(bitcoin))
                 {
-                    GestoreImpostazioni.SalvaDatiApi<BitcoinBlockexplorer>(new string[] { indirizzo });
+                    GestoreImpostazioni.SalvaDatiBlockchain(bitcoin);
                     MessageBox.Show("Indirizzo salvato. Avviato aggiornamento fondi");
                     Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
                 }

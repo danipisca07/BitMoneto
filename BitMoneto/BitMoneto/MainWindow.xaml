@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BitMoneto"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1280" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="BitMoneto" Height="800" Width="1280" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <TabControl HorizontalAlignment="Left" Margin="20,10" Height="Auto" Width="1240">
             <TabItem Header="Fondi">

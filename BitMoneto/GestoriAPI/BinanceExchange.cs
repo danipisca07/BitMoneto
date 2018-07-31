@@ -16,8 +16,15 @@ namespace GestoriAPI
     {
         private readonly ApiClient _apiClient;
         private readonly ValutaFactory _factory;
+        private List<Fondo> _fondi = null;
 
         public string Nome { get { return "Binance"; } }
+
+        public string ChiavePubblica { get { return _apiClient._apiKey; } }   
+
+        public string ChiavePrivata { get { return _apiClient._apiSecret; } }
+
+        public List<Fondo> Fondi { get { return _fondi; } }
 
         public BinanceExchange(string publicKey, string privateKey, ValutaFactory factory)
         {
@@ -29,9 +36,9 @@ namespace GestoriAPI
         
         public async Task<List<Fondo>> ScaricaFondi()
         {
-            List<Fondo> fondi = new List<Fondo>();
             try
             {
+                _fondi = new List<Fondo>();
                 BinanceClient binanceClient = new BinanceClient(_apiClient);
                 AccountInfo ris = await binanceClient.GetAccountInfo();
                 Binance.API.Csharp.Client.Models.Market.Balance[] risArray = ris.Balances.ToArray();
@@ -43,7 +50,7 @@ namespace GestoriAPI
                         decimal quantità = Convert.ToDecimal(risArray[i].Free + risArray[i].Locked);
                         Valuta valuta = _factory.OttieniValuta(risArray[i].Asset);
                         Fondo fondo = new Fondo(valuta, quantità);
-                        fondi.Add(fondo);
+                        _fondi.Add(fondo);
                     }
                 }
             }
@@ -51,14 +58,7 @@ namespace GestoriAPI
             {
                 throw new EccezioneApi("BinanceExchange(ScaricaFondi()): Errore durante il collegamento: " + e.Message);
             }
-            return fondi;
-        }
-
-        public async Task<bool> Test()
-        {
-            BinanceClient binanceClient = new BinanceClient(_apiClient);
-            dynamic test = await binanceClient.TestConnectivity();
-            return true;
+            return _fondi;
         }
 
         public override bool Equals(object obj)

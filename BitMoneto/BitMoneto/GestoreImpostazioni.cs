@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.IO;
+using Criptovalute;
 
 namespace BitMoneto
 {
@@ -55,18 +56,18 @@ namespace BitMoneto
 
                 ICryptoTransform cifratore = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
-                using (MemoryStream msEncrypt = new MemoryStream())
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    msEncrypt.Write(BitConverter.GetBytes(aesAlg.IV.Length), 0, sizeof(int));
-                    msEncrypt.Write(aesAlg.IV, 0, aesAlg.IV.Length);
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, cifratore, CryptoStreamMode.Write))
+                    ms.Write(BitConverter.GetBytes(aesAlg.IV.Length), 0, sizeof(int));
+                    ms.Write(aesAlg.IV, 0, aesAlg.IV.Length);
+                    using (CryptoStream csEncrypt = new CryptoStream(ms, cifratore, CryptoStreamMode.Write))
                     {
                         using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                         {
                             swEncrypt.Write(strInChiaro);
                         }
                     }
-                    stringa = Convert.ToBase64String(msEncrypt.ToArray());
+                    stringa = Convert.ToBase64String(ms.ToArray());
                 }
             }
             finally
@@ -87,13 +88,13 @@ namespace BitMoneto
             {
                 Rfc2898DeriveBytes chiave = new Rfc2898DeriveBytes(secret, _salt);
                 byte[] bytes = Convert.FromBase64String(strCifrata);
-                using (MemoryStream msDecrypt = new MemoryStream(bytes))
+                using (MemoryStream ms = new MemoryStream(bytes))
                 {
                     aesAlg = new RijndaelManaged();
                     aesAlg.Key = chiave.GetBytes(aesAlg.KeySize / 8);
-                    aesAlg.IV = LeggiArrayDiByte(msDecrypt);
+                    aesAlg.IV = LeggiArrayDiByte(ms);
                     ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    using (CryptoStream csDecrypt = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                     {
                         using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                         {
@@ -127,7 +128,7 @@ namespace BitMoneto
             return bytes;
         }
 
-        public static void SalvaDatiApi<T>(string[] valori)
+        private static void SalvaDatiApi<T>(string[] valori)
         {
             ConfigurationManager.RefreshSection("appSettings");
             var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
@@ -141,7 +142,35 @@ namespace BitMoneto
             configurazione.Save();
         }
 
-        public static T LeggiDatiApi<T>(object[] parametriAggiuntivi)
+        public static void SalvaDatiBlockchain(IBlockchain blockchain)
+        {
+            ConfigurationManager.RefreshSection("appSettings");
+            var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+            string nomeClasse = blockchain.GetType().FullName;
+            string valori = blockchain.Portafoglio.Indirizzo;
+            string valoriCifrati = CifraStringa(valori, configPassword);
+            if (configurazione.AppSettings.Settings[nomeClasse] == null)
+                configurazione.AppSettings.Settings.Add(nomeClasse, valoriCifrati);
+            else
+                configurazione.AppSettings.Settings[nomeClasse].Value = valoriCifrati;
+            configurazione.Save();
+        }
+
+        public static void SalvaDatiExchange(IExchange exchange)
+        {
+            ConfigurationManager.RefreshSection("appSettings");
+            var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+            string nomeClasse = exchange.GetType().FullName;
+            string valori = exchange.ChiavePubblica + ";" + exchange.ChiavePrivata;
+            string valoriCifrati = CifraStringa(valori, configPassword);
+            if (configurazione.AppSettings.Settings[nomeClasse] == null)
+                configurazione.AppSettings.Settings.Add(nomeClasse, valoriCifrati);
+            else
+                configurazione.AppSettings.Settings[nomeClasse].Value = valoriCifrati;
+            configurazione.Save();
+        }
+
+        private static T LeggiDatiApi<T>(ValutaFactory factory)
         {
             ConfigurationManager.RefreshSection("appSettings");
             string nomeClasse = typeof(T).FullName;
@@ -154,12 +183,22 @@ namespace BitMoneto
             {
                 string strValoriDecifrati = DecifraStringa(strValoriCifrati, configPassword);
                 string[] valori = strValoriDecifrati.Split(new char[] { ';' });
-                object[] parametriCostruttore = new object[valori.Length + parametriAggiuntivi.Length];
+                object[] parametriCostruttore = new object[valori.Length + 1];
                 Array.Copy(valori, parametriCostruttore, valori.Length);
-                Array.Copy(parametriAggiuntivi, 0, parametriCostruttore, valori.Length, parametriAggiuntivi.Length);
+                parametriCostruttore[parametriCostruttore.Length - 1] = factory;
                 T oggetto = (T)Activator.CreateInstance(typeof(T), parametriCostruttore);
                 return oggetto;
             }
+        }
+
+        public static T LeggiDatiExchange<T>(ValutaFactory factory) where T:IExchange
+        {
+            return LeggiDatiApi<T>(factory);
+        }
+
+        public static T LeggiDatiBlockchain<T>(ValutaFactory factory) where T : IBlockchain
+        {
+            return LeggiDatiApi<T>(factory);
         }
 
         public static bool RimuoviDatiApi<T>()

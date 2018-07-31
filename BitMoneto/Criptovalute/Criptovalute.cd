@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Criptovalute.EccezioneApi" Collapsed="true">
+    <Position X="1.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EccezioneApi.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Criptovalute.Fondo">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACBAAAAAAAAAAAAAgAAAQAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Fondo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Valuta" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Criptovalute.GestoreFondi">
+    <Position X="5" Y="12.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAqAAAACAAEAIAAAAAAAAAAAAAAAAAAAAYCIgAAAAA=</HashCode>
+      <FileName>GestoreFondi.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_exchanges" />
+      <Field Name="_blockchains" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Criptovalute.Portafoglio">
+    <Position X="5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Portafoglio.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Fondo" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Criptovalute.Valuta">
+    <Position X="9" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAACAAAAAAAAIAAAAAAAAEAQAA=</HashCode>
+      <FileName>Valuta.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Criptovalute.ValutaFactory">
+    <Position X="9.25" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAgAAAAAAAAAEAAABAACAAAA=</HashCode>
+      <FileName>ValutaFactory.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_convertitore" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="_valute" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Interface Name="Criptovalute.IBlockchain">
+    <Position X="5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAEA=</HashCode>
+      <FileName>IBlockchain.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Criptovalute.IConvertitore">
+    <Position X="6.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>IConvertitore.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Criptovalute.IExchange">
+    <Position X="7" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>IExchange.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

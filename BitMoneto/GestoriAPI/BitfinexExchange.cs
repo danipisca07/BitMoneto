@@ -12,21 +12,30 @@ namespace GestoriAPI
     {
         private readonly BitfinexApi _apiClient;
         private readonly ValutaFactory _factory;
+        private List<Fondo> _fondi = null;
 
-        public string Nome { get { return "Bitfinex";  } }
+        public string Nome { get { return "Bitfinex"; } }
+
+        public string ChiavePubblica { get; }
+
+        public string ChiavePrivata { get; }
+
+        public List<Fondo> Fondi { get { return _fondi; } }
 
         public BitfinexExchange(String publicKey, String privateKey, ValutaFactory factory)
         {
             if (publicKey == null || publicKey == "" || privateKey == null || privateKey == "")
                 throw new ArgumentException("chiavi non valide!");
             _apiClient = new BitfinexApi(publicKey, privateKey);
+            ChiavePrivata = publicKey;
+            ChiavePrivata = privateKey;
             _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }
         
         public async Task<List<Fondo>> ScaricaFondi()
         {
-            List<Fondo> fondi = new List<Fondo>();
-            //L'implementazione delle API utilizzata non è asincrona quindi la rendo asincrona inserendola in un Task con Task.Run()
+            _fondi = new List<Fondo>();
+            //L'implementazione delle API utilizzata non è asincrona quindi la rendo asincrona inserendola in un Task
             await Task.Run(() =>
             {
                 try
@@ -40,7 +49,7 @@ namespace GestoriAPI
                             decimal quantità = Convert.ToDecimal(risArray[i].Amount);
                             Valuta valuta = _factory.OttieniValuta(risArray[i].Currency);
                             Fondo fondo = new Fondo(valuta, quantità);
-                            fondi.Add(fondo);
+                            _fondi.Add(fondo);
                         }
                     }
                 }
@@ -49,7 +58,7 @@ namespace GestoriAPI
                     throw new EccezioneApi("BitfinexExchange(ScaricaFondi()): Errore durante il collegamento: " + e.Message);
                 }
             });
-            return fondi;
+            return _fondi;
         }
 
         public override bool Equals(object obj)

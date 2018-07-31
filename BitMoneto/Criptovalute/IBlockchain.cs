@@ -8,6 +8,7 @@ namespace Criptovalute
     public interface IBlockchain
     {
         String Nome { get; }
+        Portafoglio Portafoglio { get; }
         Task<Portafoglio> ScaricaPortafoglio();
     }
 }
