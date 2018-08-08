@@ -36,7 +36,7 @@ namespace BitMoneto
             gestoreFondi = new GestoreFondi();
             //TestInizializza();
             CaricaApi();
-            //TODO Aggiungere gestione impostazioni per bitfinex e etherscan
+            //TODO Aggiungere gestione impostazioni per etherscan
         }
 
         private void TestInizializza()
@@ -177,6 +177,11 @@ namespace BitMoneto
             {
                 gestoreFondi.AggiungiExchange(binance);
             }
+            BitfinexExchange bitfinex = GestoreImpostazioni.LeggiDatiExchange<BitfinexExchange>(valutaFactory);
+            if (bitfinex != null)
+            {
+                gestoreFondi.AggiungiExchange(bitfinex);
+            }
             BitcoinBlockexplorer bitcoin = GestoreImpostazioni.LeggiDatiBlockchain<BitcoinBlockexplorer>(valutaFactory);
             if (bitcoin != null)
             {
@@ -240,6 +245,44 @@ namespace BitMoneto
                 MessageBox.Show("Non ci sono attualmente chiavi associate per Binance.");
         }
 
+        private void SalvaBitfinexBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string apiPub = BitfinexPubblicaTxt.Text;
+            string apiPriv = BitfinexPrivataTxt.Text;
+            try
+            {
+                BitfinexExchange bitfinex = new BitfinexExchange(apiPub, apiPriv, valutaFactory);
+                if (gestoreFondi.AggiungiExchange(bitfinex))
+                {
+                    GestoreImpostazioni.SalvaDatiExchange(bitfinex);
+                    Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                    MessageBox.Show("Chiavi api salvate. Avviato aggiornamento fondi");
+                }
+                else
+                {
+                    MessageBox.Show("Ci sono già delle chiavi API associate per bitfinex, rimuoverle prima di aggiungerne delle altre.");
+                }
+
+            }
+            catch (ArgumentException eccezione)
+            {
+                MessageBox.Show(eccezione.Message);
+            }
+        }
+
+        private void RimuoviBitfinexBtn_Click(object sender, RoutedEventArgs e)
+        {
+            bool rimossoDaGestore = gestoreFondi.RimuoviExchange(typeof(BitfinexExchange));
+            bool rimossoDaConfigurazione = GestoreImpostazioni.RimuoviDatiApi<BitfinexExchange>();
+            if (rimossoDaGestore || rimossoDaConfigurazione)
+            {
+                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                MessageBox.Show("Exchange rimosso correttamente.");
+            }
+            else
+                MessageBox.Show("Non ci sono attualmente chiavi associate per Bitfinex.");
+        }
+
         private void SalvaBitcoinBtn_Click(object sender, RoutedEventArgs e)
         {
             string indirizzo = BitcoinTxt.Text;
@@ -276,8 +319,9 @@ namespace BitMoneto
                 MessageBox.Show("Non ci sono attualmente indirizzi associati.");
         }
 
+
         #endregion
 
-
+       
     }
 }

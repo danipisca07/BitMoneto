@@ -47,6 +47,16 @@
                                 <Button Name="RimuoviBinanceBtn" Margin="20" Content="Rimuovi" Click="RimuoviBinanceBtn_Click"/>
                             </StackPanel>
                         </GroupBox>
+                        <GroupBox Header="Bitfinex">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Chiave Pubblica: " Margin="20"/>
+                                <TextBox Name="BitfinexPubblicaTxt" Margin="20" Width="120"/>
+                                <Label Content="Chiave Privata: " Margin="20"/>
+                                <TextBox Name="BitfinexPrivataTxt" Margin="20" Width="120"/>
+                                <Button Name="SalvaBitfinexBtn" Margin="20" Content="Salva" Click="SalvaBitfinexBtn_Click"/>
+                                <Button Name="RimuoviBitfinexBtn" Margin="20" Content="Rimuovi" Click="RimuoviBitfinexBtn_Click"/>
+                            </StackPanel>
+                        </GroupBox>
                         <GroupBox Header="Bitcoin">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Indirizzo: " Margin="20"/>
