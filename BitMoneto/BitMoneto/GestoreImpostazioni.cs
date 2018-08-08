@@ -13,8 +13,9 @@ namespace BitMoneto
 {
     public static class GestoreImpostazioni
     {
+        //TODO modificare Password e salt
         // Password utilizzata per la cifratura/decifratura dei dati
-        private static string configPassword = "SecretKey";
+        private static string configPassword = "BitmonetoSecretKey";
         private static byte[] _salt = Encoding.ASCII.GetBytes("0123456789abcdef");
 
         private static string LeggiPassword()
