@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GestoriAPI;
 using Criptovalute;
 
-namespace GestoriAPI.UnitTests
+namespace Bitmoneto.UnitTests
 {
     [TestClass]
     public class BitcoinBlockExplorerTests
@@ -12,7 +12,7 @@ namespace GestoriAPI.UnitTests
         ValutaFactory factory;
         public BitcoinBlockExplorerTests()
         {
-            convertitore = new CryptoCompareConvertitore();
+            convertitore = new TestConvertitore();
             factory = new ValutaFactory(convertitore);
         }
 

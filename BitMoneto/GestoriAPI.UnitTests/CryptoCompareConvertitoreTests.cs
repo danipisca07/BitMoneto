@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using GestoriAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GestoriAPI.UnitTests
+namespace Bitmoneto.UnitTests
 {
     [TestClass]
     public class CryptoCompareConvertitoreTests
@@ -13,8 +14,7 @@ namespace GestoriAPI.UnitTests
             CryptoCompareConvertitore conv = new CryptoCompareConvertitore();
             Dictionary<String, decimal> cambi = conv.ScaricaCambi("BTC").Result;
             Assert.AreEqual<int>(cambi.Count, 4);
-            decimal ris;
-            bool ok = cambi.TryGetValue("BTC", out ris);
+            bool ok = cambi.TryGetValue("BTC", out decimal ris);
             Assert.IsTrue(ok);
             Assert.AreEqual<Decimal>(1, ris);
             ok = cambi.TryGetValue("ETH", out ris);
@@ -31,8 +31,7 @@ namespace GestoriAPI.UnitTests
             CryptoCompareConvertitore conv = new CryptoCompareConvertitore();
             Dictionary<String, decimal> cambi = conv.ScaricaCambi("ETH").Result;
             Assert.AreEqual<int>(cambi.Count, 4);
-            decimal ris;
-            bool ok = cambi.TryGetValue("ETH", out ris);
+            bool ok = cambi.TryGetValue("ETH", out decimal ris);
             Assert.IsTrue(ok);
             Assert.AreEqual<Decimal>(1, ris);
             ok = cambi.TryGetValue("BTC", out ris);
@@ -49,8 +48,7 @@ namespace GestoriAPI.UnitTests
             CryptoCompareConvertitore conv = new CryptoCompareConvertitore();
             Dictionary<String, decimal> cambi = conv.ScaricaCambi("EUR").Result;
             Assert.AreEqual<int>(cambi.Count, 4);
-            decimal ris;
-            bool ok = cambi.TryGetValue("EUR", out ris);
+            bool ok = cambi.TryGetValue("EUR", out decimal ris);
             Assert.IsTrue(ok);
             Assert.AreEqual<Decimal>(1, ris);
             ok = cambi.TryGetValue("BTC", out ris);
@@ -67,8 +65,7 @@ namespace GestoriAPI.UnitTests
             CryptoCompareConvertitore conv = new CryptoCompareConvertitore();
             Dictionary<String, decimal> cambi = conv.ScaricaCambi("USD").Result;
             Assert.AreEqual<int>(cambi.Count, 4);
-            decimal ris;
-            bool ok = cambi.TryGetValue("USD", out ris);
+            bool ok = cambi.TryGetValue("USD", out decimal ris);
             Assert.IsTrue(ok);
             Assert.AreEqual<Decimal>(1, ris);
             ok = cambi.TryGetValue("BTC", out ris);

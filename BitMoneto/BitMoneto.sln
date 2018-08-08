@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitMoneto", "BitMoneto\BitMoneto.csproj", "{D08CBAB3-894C-4CF0-AADB-E88B138AE805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestoriAPI.UnitTests", "GestoriAPI.UnitTests\GestoriAPI.UnitTests.csproj", "{6C33932A-9689-4EA9-B9D4-9A7ED2BE0192}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitmoneto.UnitTests", "GestoriAPI.UnitTests\Bitmoneto.UnitTests.csproj", "{6C33932A-9689-4EA9-B9D4-9A7ED2BE0192}"
 	ProjectSection(ProjectDependencies) = postProject
 		{68C3B0AD-5A2A-4F38-8E29-3E55530B45A8} = {68C3B0AD-5A2A-4F38-8E29-3E55530B45A8}
 	EndProjectSection
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Criptovalute", "Criptovalute\Criptovalute.csproj", "{C39A9482-AFF8-4F8B-ABF8-D8F0F5F8E1E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestoriAPI", "GestoriAPI\GestoriAPI.csproj", "{68C3B0AD-5A2A-4F38-8E29-3E55530B45A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitmoneto.IntegrationTests", "Bitmoneto.IntegrationTests\Bitmoneto.IntegrationTests.csproj", "{FDF1C6F2-11B7-4FF1-B889-1049C4FA7163}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{68C3B0AD-5A2A-4F38-8E29-3E55530B45A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C3B0AD-5A2A-4F38-8E29-3E55530B45A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68C3B0AD-5A2A-4F38-8E29-3E55530B45A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDF1C6F2-11B7-4FF1-B889-1049C4FA7163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDF1C6F2-11B7-4FF1-B889-1049C4FA7163}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDF1C6F2-11B7-4FF1-B889-1049C4FA7163}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDF1C6F2-11B7-4FF1-B889-1049C4FA7163}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

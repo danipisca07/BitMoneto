@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using Criptovalute;
+using GestoriAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GestoriAPI.UnitTests
+namespace Bitmoneto.UnitTests
 {
     [TestClass]
     public class BinanceExchangeTests
     {
         private String pubKey = "VhP4edkGMEmL51YSIXSdva0IkcGxC68r8dOIGg6G5PcNMr3srPcm4rXEled5KeMs";
         private String privKey = "1ET6MkbrkS2U1sIvQDu6gDzYzNuYgPX2ujG2Lt8tL5SFTygMKUeyDRFDJPT8Ry6Y";
-        CryptoCompareConvertitore convertitore;
+        IConvertitore convertitore;
         ValutaFactory factory;
 
         public BinanceExchangeTests()
         {
-            convertitore = new CryptoCompareConvertitore();
+            convertitore = new TestConvertitore();
             factory = new ValutaFactory(convertitore);
         }
 
@@ -55,11 +56,11 @@ namespace GestoriAPI.UnitTests
         }
 
         [TestMethod]
-        public void ScaricaFondi_ChiaviOk_Array28Valute()
+        public void ScaricaFondi_ChiaviOk_Array30Valute()
         {
             BinanceExchange explorer = new BinanceExchange(pubKey, privKey, factory);
             List<Fondo> ris = explorer.ScaricaFondi().Result;
-            Assert.AreEqual(ris.Count, 28);
+            Assert.AreEqual(ris.Count, 30);
         }
 
         [TestMethod]

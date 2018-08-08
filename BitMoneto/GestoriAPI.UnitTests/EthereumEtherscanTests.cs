@@ -3,8 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GestoriAPI;
 using Criptovalute;
 
-namespace GestoriAPI.UnitTests
-{
+namespace Bitmoneto.UnitTests
+{ 
     [TestClass]
     public class EthereumEtherscanTests
     {
@@ -12,7 +12,7 @@ namespace GestoriAPI.UnitTests
         ValutaFactory factory;
         public EthereumEtherscanTests()
         {
-            convertitore = new CryptoCompareConvertitore();
+            convertitore = new TestConvertitore();
             factory = new ValutaFactory(convertitore);
         }
         [TestMethod]

@@ -11,7 +11,7 @@ namespace Criptovalute
         public string Simbolo { get; }
 
         public Dictionary<String, decimal> Cambi { get; set; }
-
+        
         public Valuta(string nome, string simbolo)
         {
             Nome = nome ?? throw new ArgumentNullException(nameof(nome));

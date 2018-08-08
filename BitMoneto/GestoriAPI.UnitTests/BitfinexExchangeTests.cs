@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using Criptovalute;
+using GestoriAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GestoriAPI.UnitTests
+namespace Bitmoneto.UnitTests
 {
     [TestClass]
     public class BitfinexExchangeTests
     {
         private String pubKey = "5RMqfG7b2qOBkoPIi97UjCpPxnIhAUsDMelbT5K3pB2";
         private String privKey = "hnQNJgD80w1WJeZW7zclyJvFkTWNSN0N4r98t7oRrWw";
-        CryptoCompareConvertitore convertitore;
+        IConvertitore convertitore;
         ValutaFactory factory;
 
         public BitfinexExchangeTests()
         {
-            convertitore = new CryptoCompareConvertitore();
+            convertitore = new TestConvertitore();
             factory = new ValutaFactory(convertitore);
         }
 

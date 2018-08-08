@@ -13,7 +13,7 @@ namespace Criptovalute
 
         public ValutaFactory(IConvertitore convertitore)
         {
-            _convertitore = convertitore;
+            _convertitore = convertitore ?? throw new ArgumentException("Convertitore non può essere null!");
             _valute = new Dictionary<string, Valuta>();
         }
 

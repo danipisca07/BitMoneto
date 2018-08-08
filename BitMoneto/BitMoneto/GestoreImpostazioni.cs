@@ -43,7 +43,7 @@ namespace BitMoneto
             return passwordDaControllare == LeggiPassword();
         }
 
-        public static string CifraStringa(string strInChiaro, string secret)
+        private static string CifraStringa(string strInChiaro, string secret)
         {
             string stringa = null;
             RijndaelManaged aesAlg = null;
@@ -79,7 +79,7 @@ namespace BitMoneto
             return stringa;
         }
 
-        public static string DecifraStringa(string strCifrata, string secret)
+        private static string DecifraStringa(string strCifrata, string secret)
         {
             RijndaelManaged aesAlg = null;
             string stringa = null;
@@ -127,21 +127,7 @@ namespace BitMoneto
             }
             return bytes;
         }
-
-        private static void SalvaDatiApi<T>(string[] valori)
-        {
-            ConfigurationManager.RefreshSection("appSettings");
-            var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
-            string nomeClasse = typeof(T).FullName;
-            string strValori = String.Join(";", valori);
-            string valoriCifrati = CifraStringa(strValori, configPassword);
-            if (configurazione.AppSettings.Settings[nomeClasse] == null)
-                configurazione.AppSettings.Settings.Add(nomeClasse, valoriCifrati);
-            else
-                configurazione.AppSettings.Settings[nomeClasse].Value = valoriCifrati;
-            configurazione.Save();
-        }
-
+        
         public static void SalvaDatiBlockchain(IBlockchain blockchain)
         {
             ConfigurationManager.RefreshSection("appSettings");

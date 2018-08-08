@@ -186,6 +186,7 @@ namespace BitMoneto
 
         private void SalvaPasswordBtn_Click(object sender, RoutedEventArgs e)
         {
+            //TODO Aggiungere controllo 8 caratteri alla password
             string password = PasswordTxt.Text;
             if(password == null || password == "")
             {
