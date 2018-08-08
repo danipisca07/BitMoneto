@@ -36,7 +36,6 @@ namespace BitMoneto
             gestoreFondi = new GestoreFondi();
             //TestInizializza();
             CaricaApi();
-            //TODO Aggiungere gestione impostazioni per etherscan
         }
 
         private void TestInizializza()
@@ -187,6 +186,11 @@ namespace BitMoneto
             {
                 gestoreFondi.AggiungiBlockchain(bitcoin);
             }
+            EthereumEtherscan ethereum = GestoreImpostazioni.LeggiDatiBlockchain<EthereumEtherscan>(valutaFactory);
+            if (ethereum != null)
+            {
+                gestoreFondi.AggiungiBlockchain(ethereum);
+            }
         }
 
         private void SalvaPasswordBtn_Click(object sender, RoutedEventArgs e)
@@ -309,7 +313,7 @@ namespace BitMoneto
         private void RimuoviBitcoinBtn_Click(object sender, RoutedEventArgs e)
         {
             bool rimossoDaGestore = gestoreFondi.RimuoviBlockchain(typeof(BitcoinBlockexplorer));
-            bool rimossoDaConfigurazione = GestoreImpostazioni.RimuoviDatiApi<BinanceExchange>();
+            bool rimossoDaConfigurazione = GestoreImpostazioni.RimuoviDatiApi<BitcoinBlockexplorer>();
             if (rimossoDaGestore || rimossoDaConfigurazione)
             {
                 Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
@@ -319,9 +323,44 @@ namespace BitMoneto
                 MessageBox.Show("Non ci sono attualmente indirizzi associati.");
         }
 
+        private void SalvaEthereumBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string indirizzo = EthereumTxt.Text;
+            try
+            {
+                EthereumEtherscan ethereum = new EthereumEtherscan(indirizzo, valutaFactory);
+                if (gestoreFondi.AggiungiBlockchain(ethereum))
+                {
+                    GestoreImpostazioni.SalvaDatiBlockchain(ethereum);
+                    MessageBox.Show("Indirizzo salvato. Avviato aggiornamento fondi");
+                    Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                }
+                else
+                {
+                    MessageBox.Show("Esiste già un indirizzo associato, rimuoverlo prima di aggiungerne un altro.");
+                }
+            }
+            catch (ArgumentException eccezione)
+            {
+                MessageBox.Show(eccezione.Message);
+            }
+        }
+
+        private void RimuoviEthereumBtn_Click(object sender, RoutedEventArgs e)
+        {
+            bool rimossoDaGestore = gestoreFondi.RimuoviBlockchain(typeof(EthereumEtherscan));
+            bool rimossoDaConfigurazione = GestoreImpostazioni.RimuoviDatiApi<EthereumEtherscan>();
+            if (rimossoDaGestore || rimossoDaConfigurazione)
+            {
+                Dispatcher.BeginInvoke(new Action(async () => { await AggiornaFondi(); }));
+                MessageBox.Show("Protafoglio rimosso correttamente.");
+            }
+            else
+                MessageBox.Show("Non ci sono attualmente indirizzi associati.");
+        }
 
         #endregion
 
-       
+
     }
 }

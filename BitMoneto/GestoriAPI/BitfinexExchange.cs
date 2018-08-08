@@ -27,7 +27,7 @@ namespace GestoriAPI
             if (publicKey == null || publicKey == "" || privateKey == null || privateKey == "")
                 throw new ArgumentException("chiavi non valide!");
             _apiClient = new BitfinexApi(publicKey, privateKey);
-            ChiavePrivata = publicKey;
+            ChiavePubblica = publicKey;
             ChiavePrivata = privateKey;
             _factory = factory ?? throw new ArgumentException("factory non può essere null!");
         }

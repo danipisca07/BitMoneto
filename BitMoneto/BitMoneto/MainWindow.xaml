@@ -65,7 +65,14 @@
                                 <Button Name="RimuoviBitcoinBtn" Margin="20" Content="Rimuovi" Click="RimuoviBitcoinBtn_Click"/>
                             </StackPanel>
                         </GroupBox>
-                        
+                        <GroupBox Header="Ethereum">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Indirizzo: " Margin="20"/>
+                                <TextBox Name="EthereumTxt" Margin="20" Width="120"/>
+                                <Button Name="SalvaEthereumBtn" Margin="20" Content="Salva" Click="SalvaEthereumBtn_Click"/>
+                                <Button Name="RimuoviEthereumBtn" Margin="20" Content="Rimuovi" Click="RimuoviEthereumBtn_Click"/>
+                            </StackPanel>
+                        </GroupBox>
                         
                     </StackPanel>
                     <StackPanel Name="PannelloOperazione" Visibility="Hidden" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
