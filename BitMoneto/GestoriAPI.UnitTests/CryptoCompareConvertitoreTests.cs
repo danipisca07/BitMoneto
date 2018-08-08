@@ -74,8 +74,7 @@ namespace Bitmoneto.UnitTests
             Assert.IsTrue(ok);
             ok = cambi.TryGetValue("EUR", out ris);
             Assert.IsTrue(ok);
-        }
-        
+        }        
 
         [TestMethod]
         public void NomeValutaDaSimbolo_BTC_Bitcoin()
