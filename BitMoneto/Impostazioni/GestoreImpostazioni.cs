@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.IO;
 using Criptovalute;
 
-namespace BitMoneto
+namespace Impostazioni
 {
     public static class GestoreImpostazioni
     {
@@ -20,11 +20,12 @@ namespace BitMoneto
 
         private static string LeggiPassword()
         {
-            ConfigurationManager.RefreshSection("appSettings");
+
+            System.Configuration.ConfigurationManager.RefreshSection("appSettings");
+            var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
+            var passwordCifrata = configurazione.AppSettings.Settings["password"];
             
-            var passwordCifrata = ConfigurationManager.AppSettings["password"];
-            
-            return passwordCifrata == null ? null : DecifraStringa(passwordCifrata, configPassword);
+            return passwordCifrata == null ? null : DecifraStringa(passwordCifrata.Value, configPassword);
         }
 
         public static void SalvaPassword(string password)
@@ -160,15 +161,16 @@ namespace BitMoneto
         private static T LeggiDatiApi<T>(ValutaFactory factory)
         {
             ConfigurationManager.RefreshSection("appSettings");
+            var configurazione = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location);
             string nomeClasse = typeof(T).FullName;
 
-            string strValoriCifrati = ConfigurationManager.AppSettings[nomeClasse];
+            var valoriCifrati = configurazione.AppSettings.Settings[nomeClasse];
 
-            if (strValoriCifrati == null)
+            if (valoriCifrati == null)
                 return default(T);
             else
             {
-                string strValoriDecifrati = DecifraStringa(strValoriCifrati, configPassword);
+                string strValoriDecifrati = DecifraStringa(valoriCifrati.Value, configPassword);
                 string[] valori = strValoriDecifrati.Split(new char[] { ';' });
                 object[] parametriCostruttore = new object[valori.Length + 1];
                 Array.Copy(valori, parametriCostruttore, valori.Length);

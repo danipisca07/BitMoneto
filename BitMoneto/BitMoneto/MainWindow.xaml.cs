@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Criptovalute;
 using GestoriAPI;
+using Impostazioni;
 
 namespace BitMoneto
 {
