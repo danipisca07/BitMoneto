@@ -63,6 +63,7 @@ namespace BitMoneto
         private async Task AggiornaFondi()
         {
             prgAggiornaFondi.IsIndeterminate = true;
+            btnAggiornaFondi.IsEnabled = false;
             //TODO inserire timeout?
             await Task.Run(async () =>
             {
@@ -90,6 +91,7 @@ namespace BitMoneto
                     await Dispatcher.BeginInvoke(new Action(() =>
                     {
                         prgAggiornaFondi.IsIndeterminate = false;
+                        btnAggiornaFondi.IsEnabled = true;
                     }));
                 }
             });

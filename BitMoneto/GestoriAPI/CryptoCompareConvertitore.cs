@@ -1,6 +1,7 @@
 ﻿using Criptovalute;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -43,9 +44,12 @@ namespace GestoriAPI
                 
                 foreach(String valuta in SimboliConversioni)
                 {
-                    if (!Decimal.TryParse(json[valuta].ToString(), out decimal cambio))
+                    if (!Decimal.TryParse(json[valuta].ToString(),out decimal cambio))
                     {
-                        throw new EccezioneApi("CryptoCompareConvertitore(ScaricaCambi()): Valore non valido");
+                        if (!Decimal.TryParse(json[valuta].ToString(), System.Globalization.NumberStyles.Number | System.Globalization.NumberStyles.AllowExponent, new CultureInfo(""), out cambio))
+                        {
+                            throw new EccezioneApi("CryptoCompareConvertitore(ScaricaCambi()): Valore non valido");
+                        }
                     }
                     cambi.Add(valuta, cambio);
                 }
