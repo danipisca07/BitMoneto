@@ -64,7 +64,6 @@ namespace BitMoneto
         {
             prgAggiornaFondi.IsIndeterminate = true;
             btnAggiornaFondi.IsEnabled = false;
-            //TODO aggiungo controllo nessun impostazione
             await Task.Run(async () =>
             {
                 try
@@ -74,12 +73,6 @@ namespace BitMoneto
                     await Dispatcher.BeginInvoke(new Action(() =>
                     {
                         ContenitoreDati.Children.Clear();
-                        //Dictionary<string, List<Fondo>> fondi = gestoreFondi.Fondi;
-                        //foreach (string nome in fondi.Keys)
-                        //{
-                        //    bool ok = fondi.TryGetValue(nome, out List<Fondo> valori);
-                        //    if (ok) AggiungiDati(nome, valori);
-                        //}
                         foreach(IExchange exchage in gestoreFondi.Exchanges)
                         {
                             AggiungiDati(exchage.Nome, exchage.Fondi);
@@ -164,7 +157,10 @@ namespace BitMoneto
 
         private async void btnAggiornaFondi_Click(object sender, RoutedEventArgs e)
         {
-            await AggiornaFondi();
+            if (gestoreFondi.Blockchains.Count != 0 || gestoreFondi.Exchanges.Count != 0)
+                await AggiornaFondi();
+            else
+                MessageBox.Show("Non ci sono chiavi API o indirizzi di portafoglio attualmente associati, aggiungili dalla schermata delle impostazioni per continuare.");
         }
 
         private void ScrollViewerDati_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
