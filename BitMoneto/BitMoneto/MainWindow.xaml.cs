@@ -64,7 +64,7 @@ namespace BitMoneto
         {
             prgAggiornaFondi.IsIndeterminate = true;
             btnAggiornaFondi.IsEnabled = false;
-            //TODO inserire timeout?
+            //TODO aggiungo controllo nessun impostazione
             await Task.Run(async () =>
             {
                 try
@@ -74,11 +74,19 @@ namespace BitMoneto
                     await Dispatcher.BeginInvoke(new Action(() =>
                     {
                         ContenitoreDati.Children.Clear();
-                        Dictionary<string, List<Fondo>> fondi = gestoreFondi.Fondi;
-                        foreach (string nome in fondi.Keys)
+                        //Dictionary<string, List<Fondo>> fondi = gestoreFondi.Fondi;
+                        //foreach (string nome in fondi.Keys)
+                        //{
+                        //    bool ok = fondi.TryGetValue(nome, out List<Fondo> valori);
+                        //    if (ok) AggiungiDati(nome, valori);
+                        //}
+                        foreach(IExchange exchage in gestoreFondi.Exchanges)
                         {
-                            bool ok = fondi.TryGetValue(nome, out List<Fondo> valori);
-                            if (ok) AggiungiDati(nome, valori);
+                            AggiungiDati(exchage.Nome, exchage.Fondi);
+                        }
+                        foreach(IBlockchain blockchain in gestoreFondi.Blockchains)
+                        {
+                            AggiungiDati(blockchain.Nome, new List<Fondo>() { blockchain.Portafoglio.Fondo });
                         }
                     }));
                 }
@@ -149,7 +157,6 @@ namespace BitMoneto
                 colConv.Binding = binding;
                 dati.Columns.Add(colConv);
             }
-            
 
             pannelloDati.Children.Add(dati);
             ContenitoreDati.Children.Add(pannelloDati);

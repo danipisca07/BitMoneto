@@ -26,6 +26,24 @@ namespace GestoriAPI
 
         public List<Fondo> Fondi { get { return _fondi; } }
 
+        public Dictionary<string,decimal> Totali
+        {
+            get
+            {
+                Dictionary<string, decimal> totali = new Dictionary<string, decimal>();
+                foreach(Fondo fondo in Fondi)
+                {
+                    foreach(KeyValuePair<string,decimal> cambio in fondo.Cambi)
+                    {
+                        if (!totali.TryGetValue(cambio.Key, out decimal totale))
+                            totale = 0;
+                        totali.Add(cambio.Key, totale + cambio.Value);
+                    }
+                }
+                return totali;
+            }
+        }
+
         public BinanceExchange(string publicKey, string privateKey, ValutaFactory factory)
         {
             if (publicKey == null || publicKey.Length != 64 || privateKey == null || privateKey.Length != 64)

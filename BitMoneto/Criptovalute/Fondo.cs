@@ -12,6 +12,18 @@ namespace Criptovalute
 
         public Valuta Valuta { get; }
         public decimal Quantità { get; }
+        public Dictionary<string, decimal> Cambi
+        {
+            get
+            {
+                Dictionary<string, decimal> cambi = new Dictionary<string, decimal>();
+                foreach (KeyValuePair<string, decimal> cambio in Valuta.Cambi)
+                {
+                    cambi.Add(cambio.Key, cambio.Value * Quantità);
+                }
+                return cambi;
+            }
+        }
 
         public Fondo(Valuta valuta, decimal quantità)
         {

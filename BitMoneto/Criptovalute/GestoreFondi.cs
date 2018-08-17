@@ -10,7 +10,11 @@ namespace Criptovalute
     public class GestoreFondi
     {
         private List<IExchange> _exchanges;
+        public List<IExchange> Exchanges { get { return _exchanges; } }
+
         private List<IBlockchain> _blockchains;
+        public List<IBlockchain> Blockchains { get { return _blockchains; } }
+
         private ConcurrentDictionary<String, List<Fondo>> _fondi;
         public Dictionary<String, List<Fondo>> Fondi {
             get {
