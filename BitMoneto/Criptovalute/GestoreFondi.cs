@@ -15,16 +15,16 @@ namespace Criptovalute
         private List<IBlockchain> _blockchains;
         public List<IBlockchain> Blockchains { get { return _blockchains; } }
 
-        private ConcurrentDictionary<String, List<Fondo>> _fondi;
-        public Dictionary<String, List<Fondo>> Fondi {
-            get {
-                return _fondi.ToDictionary(chiave=>chiave.Key, valore=>valore.Value);
-            }
-        }
+        //private ConcurrentDictionary<String, List<Fondo>> _fondi;
+        //public Dictionary<String, List<Fondo>> Fondi {
+        //    get {
+        //        return _fondi.ToDictionary(chiave=>chiave.Key, valore=>valore.Value);
+        //    }
+        //}
 
         public GestoreFondi()
         {
-            _fondi = new ConcurrentDictionary<string, List<Fondo>>();
+            //_fondi = new ConcurrentDictionary<string, List<Fondo>>();
             _exchanges = new List<IExchange>();
             _blockchains = new List<IBlockchain>();
         }
@@ -69,8 +69,8 @@ namespace Criptovalute
              var tasks = _exchanges.Select(async exchange =>
              {
                  List<Fondo> tmp = await exchange.ScaricaFondi();
-                 if (!_fondi.TryAdd(exchange.Nome, tmp))
-                     throw new Exception("Gestore fondi(AggiornaExchanges()): errore aggiunta fondi");
+                 //if (!_fondi.TryAdd(exchange.Nome, tmp))
+                 //    throw new Exception("Gestore fondi(AggiornaExchanges()): errore aggiunta fondi");
              });
              await Task.WhenAll(tasks);
         }
@@ -107,8 +107,8 @@ namespace Criptovalute
             var tasks = _blockchains.Select(async blockchain =>
             {
                 Portafoglio tmp = await blockchain.ScaricaPortafoglio();
-                if (!_fondi.TryAdd(blockchain.Nome, new List<Fondo> { tmp.Fondo }))
-                    throw new Exception("Gestore fondi(AggiornaBlockchains()):errore aggiunta fondi");
+                //if (!_fondi.TryAdd(blockchain.Nome, new List<Fondo> { tmp.Fondo }))
+                //    throw new Exception("Gestore fondi(AggiornaBlockchains()):errore aggiunta fondi");
             });
             await Task.WhenAll(tasks);
         }
@@ -116,7 +116,7 @@ namespace Criptovalute
 
         public async Task AggiornaFondi()
         {
-            _fondi = new ConcurrentDictionary<string, List<Fondo>>();
+            //_fondi = new ConcurrentDictionary<string, List<Fondo>>();
             Task aggiornamentoExchanges = AggiornaExchanges();
             Task aggiornamentoBlockchains = AggiornaBlockchains();
             await Task.WhenAll(aggiornamentoExchanges, aggiornamentoBlockchains);
