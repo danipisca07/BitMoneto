@@ -42,9 +42,9 @@ namespace Bitmoneto.UnitTests
         {
             Assert.IsTrue(gestoreFondi.AggiungiExchange(exchange));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(1,lista.Count);
-            Assert.IsTrue(lista.TryGetValue("TestExchange", out List<Fondo> fondi));
+            Assert.AreEqual<int>(1, gestoreFondi.Exchanges.Count);
+            Assert.AreEqual<string>("TestExchange", gestoreFondi.Exchanges.ToArray()[0].Nome);
+            List<Fondo> fondi = gestoreFondi.Exchanges.ToArray()[0].Fondi;
             Assert.AreEqual<int>(2,fondi.Count);
         }
         
@@ -53,9 +53,9 @@ namespace Bitmoneto.UnitTests
         {
             Assert.IsTrue(gestoreFondi.AggiungiBlockchain(blockchain));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(lista.Count, 1);
-            Assert.IsTrue(lista.TryGetValue("TestBlockchain", out List<Fondo> fondi));
+            Assert.AreEqual<int>(1, gestoreFondi.Blockchains.Count);
+            Assert.AreEqual<string>("TestBlockchain", gestoreFondi.Blockchains.ToArray()[0].Nome);
+            List<Fondo> fondi = new List<Fondo>() { gestoreFondi.Blockchains.ToArray()[0].Portafoglio.Fondo };
             Assert.AreEqual<int>(fondi.Count, 1);
         }
 
@@ -65,12 +65,16 @@ namespace Bitmoneto.UnitTests
             Assert.IsTrue(gestoreFondi.AggiungiExchange(exchange));
             Assert.IsTrue(gestoreFondi.AggiungiBlockchain(blockchain));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> liste = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(liste.Count, 2);
-            foreach(List<Fondo> lista in liste.Values)
-            {
-                Assert.IsTrue(lista.Count > 0);
-            }
+            //Controllo exchange
+            Assert.AreEqual<int>(1, gestoreFondi.Exchanges.Count);
+            Assert.AreEqual<string>("TestExchange", gestoreFondi.Exchanges.ToArray()[0].Nome);
+            List<Fondo> fondi = gestoreFondi.Exchanges.ToArray()[0].Fondi;
+            Assert.AreEqual<int>(2, fondi.Count);
+            //Controllo blockchain
+            Assert.AreEqual<int>(1, gestoreFondi.Blockchains.Count);
+            Assert.AreEqual<string>("TestBlockchain", gestoreFondi.Blockchains.ToArray()[0].Nome);
+            fondi = new List<Fondo>() { gestoreFondi.Blockchains.ToArray()[0].Portafoglio.Fondo };
+            Assert.AreEqual<int>(fondi.Count, 1);
         }
     }
 }

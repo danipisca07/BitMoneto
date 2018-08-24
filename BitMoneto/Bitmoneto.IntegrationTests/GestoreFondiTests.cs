@@ -60,9 +60,9 @@ namespace Bitmoneto.UnitTests
         {
             Assert.IsTrue(gestoreFondi.AggiungiExchange(bitfinex));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(lista.Count, 1);
-            Assert.IsTrue(lista.TryGetValue("Bitfinex", out List<Fondo> fondi));
+            Assert.AreEqual<int>(1, gestoreFondi.Exchanges.Count);
+            Assert.AreEqual<string>("Bitfinex", gestoreFondi.Exchanges.ToArray()[0].Nome);
+            List<Fondo> fondi = gestoreFondi.Exchanges.ToArray()[0].Fondi;
             Assert.AreEqual<int>(fondi.Count, 2);
             foreach (Fondo fondo in fondi)
             {
@@ -76,9 +76,9 @@ namespace Bitmoneto.UnitTests
         {
             Assert.IsTrue(gestoreFondi.AggiungiExchange(binance));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(lista.Count, 1);
-            Assert.IsTrue(lista.TryGetValue("Binance", out List<Fondo> fondi));
+            Assert.AreEqual<int>(1, gestoreFondi.Exchanges.Count);
+            Assert.AreEqual<string>("Binance", gestoreFondi.Exchanges.ToArray()[0].Nome);
+            List<Fondo> fondi = gestoreFondi.Exchanges.ToArray()[0].Fondi;
             Assert.AreEqual<int>(fondi.Count, 30);
             foreach (Fondo fondo in fondi)
             {
@@ -92,9 +92,9 @@ namespace Bitmoneto.UnitTests
         {
             Assert.IsTrue(gestoreFondi.AggiungiBlockchain(btc));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(lista.Count, 1);
-            Assert.IsTrue(lista.TryGetValue("Bitcoin(18cBEMRxXHqzWWCxZNtU91F5sbUNKhL5PX)", out List<Fondo> fondi));
+            Assert.AreEqual<int>(1, gestoreFondi.Blockchains.Count);
+            Assert.AreEqual<string>("Bitcoin(18cBEMRxXHqzWWCxZNtU91F5sbUNKhL5PX)", gestoreFondi.Blockchains.ToArray()[0].Nome);
+            List<Fondo> fondi = new List<Fondo>() { gestoreFondi.Blockchains.ToArray()[0].Portafoglio.Fondo };
             Assert.AreEqual<int>(fondi.Count, 1);
             Assert.AreEqual<decimal>(1, fondi.ToArray()[0].Valuta.Cambi["BTC"]);
         }
@@ -104,9 +104,9 @@ namespace Bitmoneto.UnitTests
         {
             Assert.IsTrue(gestoreFondi.AggiungiBlockchain(eth));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> lista = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(lista.Count, 1);
-            Assert.IsTrue(lista.TryGetValue("Ethereum(0x901476A5a3C504398967C745F236124201298016)", out List<Fondo> fondi));
+            Assert.AreEqual<int>(1, gestoreFondi.Blockchains.Count);
+            Assert.AreEqual<string>("Ethereum(0x901476A5a3C504398967C745F236124201298016)", gestoreFondi.Blockchains.ToArray()[0].Nome);
+            List<Fondo> fondi = new List<Fondo>() { gestoreFondi.Blockchains.ToArray()[0].Portafoglio.Fondo };
             Assert.AreEqual<int>(fondi.Count, 1);
             Assert.AreEqual<decimal>(1, fondi.ToArray()[0].Valuta.Cambi["ETH"]);
         }
@@ -119,16 +119,22 @@ namespace Bitmoneto.UnitTests
             Assert.IsTrue(gestoreFondi.AggiungiBlockchain(btc));
             Assert.IsTrue(gestoreFondi.AggiungiBlockchain(eth));
             gestoreFondi.AggiornaFondi().Wait();
-            Dictionary<string, List<Fondo>> liste = gestoreFondi.Fondi;
-            Assert.AreEqual<int>(liste.Count, 4);
-            foreach(List<Fondo> lista in liste.Values)
+            Assert.AreEqual<int>(2, gestoreFondi.Exchanges.Count);
+            Assert.AreEqual<int>(2, gestoreFondi.Blockchains.Count);
+            foreach(IExchange ex in gestoreFondi.Exchanges)
             {
-                Assert.IsTrue(lista.Count > 0);
-                foreach(Fondo fondo in lista)
+                Assert.IsTrue(ex.Fondi.Count > 0);
+                foreach (Fondo fondo in ex.Fondi)
                 {
                     if (fondo.Valuta.Nome != fondo.Valuta.Simbolo)
                         Assert.IsTrue(fondo.Valuta.Cambi.Count == 4);
                 }
+            }
+            foreach (IBlockchain bc in gestoreFondi.Blockchains)
+            {
+                Assert.IsTrue(bc.Portafoglio != null);
+                if (bc.Portafoglio.Fondo.Valuta.Nome != bc.Portafoglio.Fondo.Valuta.Simbolo)
+                        Assert.IsTrue(bc.Portafoglio.Fondo.Valuta.Cambi.Count == 4);
             }
         }
     }
